@@ -5,11 +5,27 @@ on:
     branches: [ main ]
 
 jobs:
-  kubeconform:
+  StaticFileValidation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: yokawasa/action-setup-kube-tools@v0.11.0
+
+      - name: Get specific changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v14.5
+        with:
+          files: |
+            Dir*\*
+
+      - name: Run step if any of the listed files above 
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-files-specific.outputs. all_changed_files }}; do
+            echo "$file was modified"
+          done
+
+      - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
+        uses: yokawasa/action-setup-kube-tools@v0.11.0
         with:
           setup-tools: |
             kubeconform
