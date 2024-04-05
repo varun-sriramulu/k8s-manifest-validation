@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sssmock
+spec:
+  type: ClusterIP
+  selector:
+    app: sssmock
+    version: v1
+    app.kubernetes.io/name: sssmock
+    app.kubernetes.io/instance: sssmock
+  ports:
+    - port: 80
+      targetPort: 8080

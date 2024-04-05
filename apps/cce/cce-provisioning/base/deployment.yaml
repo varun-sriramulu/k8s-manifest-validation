@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cce-provisioning
+
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cce-provisioning
+      app.kubernetes.io/instance: cce-provisioning
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cce-provisioning
+        app.kubernetes.io/instance: cce-provisioning
+    spec:
+      serviceAccountName: cce-provisioning
+      securityContext: {}
+      containers:
+      - name: cce-provisioning
+        image: "cceprovisioning:1.0.0076"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8093
+        resources: {}
+        env:
+          - name: SPRING_DATASOURCE_HOSTNAME     
+            valueFrom:
+              secretKeyRef:
+                name: cce-db-hostname
+                key: value
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: cce-db-username
+                key: value
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cce-db-password
+                key: value
+          - name: SPRING_DATASOURCE_URL   
+            value: jdbc:postgresql://${SPRING_DATASOURCE_HOSTNAME}:5432/tpsdb
+        envFrom:
+            - configMapRef:
+                name: cce-env-config
+            - configMapRef:
+                name: cce-base-config
+

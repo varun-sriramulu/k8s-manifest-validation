@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nots
+spec:
+  type: ClusterIP
+  selector:
+    app: nots
+    app.kubernetes.io/name: nots
+    app.kubernetes.io/instance: nots
+  ports:
+    - port: 80
+      targetPort: 8080

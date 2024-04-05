@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-sqs
+spec:
+  hosts:
+  - sqs.us-west-2.amazonaws.com
+  location: MESH_EXTERNAL
+  ports:
+  - name: http
+    number: 80
+    protocol: HTTP
+  resolution: DNS

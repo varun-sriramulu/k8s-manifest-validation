@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gapi
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gapi
+      app.kubernetes.io/instance: gapi
+  template:
+    spec:
+      containers:
+        - name: gapi
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 100m
+              memory: 1G

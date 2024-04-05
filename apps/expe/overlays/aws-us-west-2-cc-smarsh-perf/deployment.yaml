@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expe
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: expe
+      app.kubernetes.io/instance: expe
+  template:
+    spec:
+      containers:
+        - name: expe
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+              ephemeral-storage: 4G
+            requests:
+              cpu: 1000m
+              memory: 1G
+              ephemeral-storage: 1G

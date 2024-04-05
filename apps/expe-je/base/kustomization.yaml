@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: expe-je-base-config
+  literals:
+  - s3.exporter.service.name=aws-s3-archive-service
+  - s3.metadata.service.name=aws-s3-archive-service
+  - rmq.cluster.name=rmq-cluster
+  - document.db.service.name=document-db
+  - rds.db.service.name=quartz-db
+  - monitoring.tags.service=expe-je
+
+

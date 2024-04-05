@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: vtglicense
+spec:
+  selector:
+    matchLabels:
+      app: vtglicense
+      app.kubernetes.io/name: vtglicense
+      app.kubernetes.io/instance: vtglicense
+  template:
+    metadata:
+      labels:
+        app: vtglicense
+        app.kubernetes.io/name: vtglicense
+        app.kubernetes.io/instance: vtglicense
+    spec:
+      serviceAccountName: vtglicense
+      securityContext: {}
+      containers:
+        - name: vtglicense
+          image: "vtglicense:2.218.0"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 180
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 180        

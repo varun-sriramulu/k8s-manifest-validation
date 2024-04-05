@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smfe
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: smfe
+      app.kubernetes.io/instance: smfe
+  template:
+    spec:
+      containers:
+        - name: smfe
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 2G
+              ephemeral-storage: 1G

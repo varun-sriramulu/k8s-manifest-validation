@@ -1,0 +1,69 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+
+patches:
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "external-user-access-cada"
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "external-user-access-prva"
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "external-user-access-cntu"
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "external-user-access-smfe"
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "external-user-access-wpea"    
+- patch: '[{"op": "replace", "path": "/spec/rules/0/from/0/source/namespaces/0", "value": "cc-smarsh-dev"}]'
+  target:
+    kind: "AuthorizationPolicy"
+    name: "internal-user-access"
+- patch: '[{"op": "replace", "path": "/spec/jwtRules/0/issuer", "value": "http://uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud/oauth/token"},
+           {"op": "replace", "path": "/spec/jwtRules/0/jwksUri", "value": "https://uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud/token_keys"},
+           {"op": "replace", "path": "/spec/jwtRules/1/issuer", "value": "http://internal-poc.uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud/oauth/token"},
+           {"op": "replace", "path": "/spec/jwtRules/1/jwksUri", "value": "https://uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud/token_keys"}]'
+  target:
+    kind: "RequestAuthentication"
+    name: "jwt-authn" 
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "api.cc-dev.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-prva-external"
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "api.cc-dev.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-wpea-external" 
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "api.cc-dev.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-smfe-external" 
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "api.cc-dev.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-cntu-external"
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "api.cc-dev.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-uaa-external"                   
+- patch: '[{"op": "replace", "path": "/spec/hosts/0", "value": "sqs-gateway.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud"},
+           {"op": "replace", "path": "/spec/gateways/0", "value": "istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev"}]'
+  target:
+    kind: "VirtualService"
+    name: "cc-route-sqs"           
+
+namespace: cc-smarsh-dev

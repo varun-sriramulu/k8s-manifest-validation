@@ -1,0 +1,37 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: fiqa-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+
+  path: cloud-capture/cc-dev/rmq-cluster
+  
+  destination:
+    name: fiqa-rmq-cluster
+    create: true
+  
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: fiqa-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-dev/fiqa-db
+
+  destination:
+    name: fiqa-db
+    create: true
+
+  refreshAfter: 30s
+---  

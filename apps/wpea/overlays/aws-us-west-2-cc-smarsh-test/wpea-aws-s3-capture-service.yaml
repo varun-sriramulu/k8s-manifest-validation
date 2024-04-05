@@ -1,0 +1,22 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: wpea-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/aws-s3-capture-service
+
+  # dest k8s secret
+  destination:
+    name: wpea-aws-s3-capture-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

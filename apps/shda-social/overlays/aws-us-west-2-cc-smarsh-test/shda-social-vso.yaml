@@ -1,0 +1,56 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-social-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+
+  path: cloud-capture/cc-test/scheduler-social-db
+  destination:
+    name: shda-social-db
+    create: true
+    
+  refreshAfter: 30s
+--- 
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-social-rmq
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-test/rmq-cluster
+
+  destination:
+    name: shda-social-rmq
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-social-aws-s3-archive-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-test/aws-s3-archive-service
+
+  destination:
+    name: shda-social-aws-s3-archive-service
+    create: true
+
+  refreshAfter: 30s
+---  
+ 

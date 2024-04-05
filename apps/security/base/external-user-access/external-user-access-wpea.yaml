@@ -1,0 +1,54 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: external-user-access-wpea
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wpea
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            namespaces: ["namespace"] 
+    - to:
+        - operation:
+            paths: ["/v2/api-docs",
+                    "/v3/**",
+                    "/v3/api-docs/swagger-config",
+                    "/v3/api-docs",
+                    "/webjars/**",
+                    "/webjars/swagger-ui/*",
+                    "/webjars/swagger-ui/index.html",
+                    "/swagger-ui/**",
+                    "/swagger-ui/*",
+                    "/swagger-ui.html",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/actuator/health",
+                    "/manage/health",
+                    "/favicon.ico",
+                    "/login",
+                    "/healthz",
+                    "/workplace/subscriptions",
+                    "/twitter/subscriptions",
+                    "/events/zoom/deauth/notification"]
+    - to:
+        - operation:
+            methods: [GET]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-engineer" ]   
+    - to:
+        - operation:
+            methods: [GET,POST]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-oncall" ]                    
+    - to:
+        - operation:
+            methods: [GET,POST,PUT,PATCH,DELETE]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-admin" ]   

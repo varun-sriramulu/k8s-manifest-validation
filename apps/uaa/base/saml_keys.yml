@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: uaa-saml-keys
+type: Opaque
+stringData:
+  saml_keys.yml: |
+    login:
+      saml:
+        activeKeyId: saml_key_id
+        keys:
+          saml_key_id:
+            key: |
+              ${jwttoken}
+            passphrase: ${adminclientsecret}
+            certificate: |
+              ${certificate}
+ 

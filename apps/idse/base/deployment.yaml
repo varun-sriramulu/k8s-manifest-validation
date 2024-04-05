@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: idse
+spec:
+  selector:
+    matchLabels:
+      app: idse
+      app.kubernetes.io/name: idse
+      app.kubernetes.io/instance: idse
+  template:
+    metadata:
+      labels:
+        app: idse
+        app.kubernetes.io/name: idse
+        app.kubernetes.io/instance: idse
+    spec:
+      serviceAccountName: idse
+      securityContext: {}
+      containers:
+        - name: idse
+          image: "idse:3.0.110"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 120
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /manage/health/readiness
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 120
+          envFrom:
+            - secretRef:
+                name: idse-db
+            - secretRef:
+                name: idse-vault
+            - configMapRef:
+                name: idse-base-config
+            - configMapRef:
+                name: cc-shared-env-config
+            - configMapRef:
+                name: cc-shared-monitoring-config                  
+          env:
+            - name: spring.application.name
+              value: "idse"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "cloud,k8"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=idse"
+            - name: monitoring.tags.service
+              value: "idse"
+            - name: management.metrics.export.datadog.api-key
+              valueFrom:
+                secretKeyRef:
+                  name: cc-datadog-api-key
+                  key: value              

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: eaex
+spec:
+  selector:
+    matchLabels:
+      app: eaex
+      app.kubernetes.io/name: eaex
+      app.kubernetes.io/instance: eaex
+  template:
+    metadata:
+      labels:
+        app: eaex
+        app.kubernetes.io/name: eaex
+        app.kubernetes.io/instance: eaex
+    spec:
+      serviceAccountName: eaex
+      securityContext: {}
+      containers:
+      - name: eaex
+        image: "eaex:1.0.0339"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: eaex-aws-s3-archive-service
+        - secretRef:
+            name: eaex-common-scheduler-db
+        - secretRef:
+            name: eaex-document-db
+        - secretRef:
+            name: eaex-rmq-cluster
+        - secretRef:
+            name: eaex-redis
+        - configMapRef:
+            name: eaex-base-config
+        - configMapRef:
+            name: eaex-overlays-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config    
+        env:
+        - name: spring.application.name
+          value: "eaex"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=eaex"
+        - name: monitoring.tags.service
+          value: "eaex"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+
+
+

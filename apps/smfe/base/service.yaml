@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: smfe
+spec:
+  type: ClusterIP
+  selector:
+    app: smfe
+    app.kubernetes.io/name: smfe
+    app.kubernetes.io/instance: smfe
+  ports:
+    - port: 80
+      targetPort: 8080

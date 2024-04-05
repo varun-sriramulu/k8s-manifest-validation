@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: uaa
+spec:
+  hosts:
+    - "uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud"
+    - "internal-poc.uaa.cc-dev.internal.smarsh.us-west-2.aws.smarsh.cloud"
+  gateways:
+    - istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-dev
+
+  http:
+    - route:
+        - destination:
+            host: uaa
+      match:
+        - uri:
+            prefix: /

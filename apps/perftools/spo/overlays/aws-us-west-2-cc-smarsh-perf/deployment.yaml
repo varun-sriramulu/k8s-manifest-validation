@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spomockserver
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spomockserver
+      app.kubernetes.io/instance: spomockserver
+  template:
+    spec:
+      containers:
+        - name: spomockserver
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2G
+            requests:
+              cpu: 1000m
+              memory: 2G

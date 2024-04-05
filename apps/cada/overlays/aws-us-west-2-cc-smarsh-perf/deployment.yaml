@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cada
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cada
+      app.kubernetes.io/instance: cada
+  template:
+    spec:
+      containers:
+        - name: cada
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 100m
+              memory: 1G

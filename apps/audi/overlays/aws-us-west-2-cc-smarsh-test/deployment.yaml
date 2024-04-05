@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audi
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: audi
+      app.kubernetes.io/instance: audi
+  template:
+    spec:
+      containers:
+        - name: audi
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1G
+              ephemeral-storage: 256M
+            requests:
+              cpu: 100m
+              memory: 0.25G
+              ephemeral-storage: 128M

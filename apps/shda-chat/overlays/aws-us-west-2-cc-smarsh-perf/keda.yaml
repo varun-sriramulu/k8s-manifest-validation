@@ -1,0 +1,36 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: shda-chat
+  # annotations:
+    # If your environment already operates using kubernetes HPA, you can transfer the ownership of this resource to a new ScaledObject
+    # scaledobject.keda.sh/transfer-hpa-ownership: "true"      # Optional. Use to transfer an existing HPA ownership to this ScaledObject
+    # autoscaling.keda.sh/paused-replicas: "0"               # Optional. Use to pause autoscaling of objects
+    # autoscaling.keda.sh/paused: "true"                     # Optional. Use to pause autoscaling of objects explicitly
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1                                      # API version of target resource. Default: apps/v1
+    kind: Deployment                                         # Kind of target resource. Default: Deployment
+    name: shda-chat                                               # Name of target resource. Mandatory: Must be in the same namespace as the ScaledObject
+    envSourceContainerName: shda-chat                             # Optional. Default: .spec.template.spec.containers[0]
+  pollingInterval: 30                                        # Optional. Default: 30 seconds
+  minReplicaCount: 2                                         # Minimum number of replicas. Mandatory
+  maxReplicaCount: 2                                         # Maximum number of replicas. Mandatory
+  advanced:
+    restoreToOriginalReplicaCount: true                      # If ScaledObject is deleted it will restore the replica count to what is specified in the deployment. # Optional. Default: false
+    horizontalPodAutoscalerConfig:                           # Optional. Section to specify HPA related options
+      behavior:                                              # Optional. Use to modify HPA's scaling behavior
+        scaleDown:
+          stabilizationWindowSeconds: 120                     # The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating. The autoscaling algorithm uses this window to infer a previous desired state and avoid unwanted changes to workload scale.
+          policies:                                        # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#scaling-policies
+          - type: Pods
+            value: 1
+            periodSeconds: 30
+          # - type: Percent
+          #   value: 30
+          #   periodSeconds: 30
+  triggers:
+    - type: cpu
+      metricType: Utilization                                # Allowed types are 'Utilization' or 'AverageValue'
+      metadata:
+        value: "50"

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftch-financial
+spec:
+  type: ClusterIP
+  selector:
+    app: ftch-financial
+    app.kubernetes.io/name: ftch-financial
+    app.kubernetes.io/instance: ftch-financial
+  ports:
+    - port: 80
+      targetPort: 8080

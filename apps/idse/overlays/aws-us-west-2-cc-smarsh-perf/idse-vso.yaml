@@ -1,0 +1,38 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: idse-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/identity-db
+
+  destination:
+    name: idse-db
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: idse-vault
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/vault
+
+  destination:
+    name: idse-vault
+    create: true
+
+  refreshAfter: 30s
+---  

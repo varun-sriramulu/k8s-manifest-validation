@@ -1,0 +1,81 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: external-user-access-prva
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prva
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            namespaces: ["namespace"] 
+    - to:
+        - operation:
+            paths: ["/v2/api-docs",
+                    "/v3/**",
+                    "/v3/api-docs/swagger-config",
+                    "/v3/api-docs",
+                    "/webjars/**",
+                    "/webjars/swagger-ui/*",
+                    "/webjars/swagger-ui/index.html",
+                    "/swagger-ui/**",
+                    "/swagger-ui/*",
+                    "/swagger-ui.html",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/actuator/health",
+                    "/manage/health",
+                    "/favicon.ico",
+                    "/login",
+                    "/healthz",
+                    "/oauth/*"]
+    - to:
+        - operation:
+            methods: [GET]
+            paths: ["/client/*","/provisioning/auth/statuses","/feeds/*"]  
+        - operation:
+            methods: [POST]
+            paths: ["/client/*","/auth/feeds"]
+        - operation:
+            methods: [PATCH]
+            paths: ["/feeds/*"]
+        - operation: 
+            methods: [PUT]
+            paths: ["/feeds/*"]    
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "pa-provision" ]         
+    - to:
+        - operation:
+            methods: [GET]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-engineer" ]   
+    - to:
+        - operation:
+            methods: [GET,POST]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-oncall" ]                    
+    - to:
+        - operation:
+            methods: [GET,POST,PUT,PATCH,DELETE]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-admin" ]    
+    - to:
+        - operation:
+            methods: [GET]
+            paths: ["/users","/oauth1/user/callback","/oauth1/*/authorize/user/*","/feeds","/clients/*/users/export"]
+        - operation:
+            methods: [POST]
+            paths: ["/clients/*/users","/users/passwordReset","/clients/*/users/email/welcome"]
+        - operation:
+            methods: [PUT]
+            paths: ["/clients/*/users"]
+      when:
+        - key: request.auth.claims[scope]
+          values: [ "cc-social" ]

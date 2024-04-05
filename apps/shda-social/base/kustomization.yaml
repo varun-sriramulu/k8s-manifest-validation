@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: shda-social-base-config
+  literals:
+  - db.service.name=scheduler-social-db
+  - s3.service.name=aws-s3-archive-service
+  - rmq.cluster.name=rmq-cluster
+  - scheduler.api.scheduleCallbackQueueName=social-scheduler-callback
+  - scheduler.api.tasksToRunQueueNamePrefix=social-scheduler-
+  - scheduler.api.error.queueNamePrefix=social-scheduler-error- 
+  - scheduler.jobexecution.queue=social-execution-create-request
+  - scheduler.feature.publishExecutions.type=ConcurrencyControlledRoundRobin
+  - scheduler.api.jobExecutionArchiveEnabled=false
+  - scheduler.api.publishJobExecutionStatisticsInDatadog=false
+  - scheduler.updateRundate.endpoint.enabled=true
+  - scheduler.rmq-binder.queue.fetchQueueName=social-scheduler-fetch-main
+  - scheduler.rmq-binder.queue.callbackQueueName=social-scheduler-callback-main
+  - scheduler.rmq-binder.queue.managingQueueName=social-scheduler-managing-main
+  - scheduler.rmq-binder.queueBinding.social-scheduler-fetch=scheduler-fetch-main-out-0
+  - scheduler.rmq-binder.queueBinding.social-scheduler-callback=scheduler-callback-main-out-0
+  - scheduler.rmq-binder.queueBinding.social-scheduler-managing=scheduler-managing-main-out-0 

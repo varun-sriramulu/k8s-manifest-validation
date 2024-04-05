@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-rtra-test
+spec:
+  hosts:
+    - "rtra.cc-test.internal.smarsh.us-west-2.aws.smarsh.cloud"
+  gateways:
+    - istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-test
+  http:
+    - route:
+        - destination:
+            host: rtra
+      match:
+      - uri:
+          prefix: "/"    

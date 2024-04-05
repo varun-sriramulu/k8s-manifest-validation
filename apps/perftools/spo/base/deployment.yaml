@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: spomockserver
+spec:
+  selector:
+    matchLabels:
+      app: spomockserver
+      app.type: mock
+      app.kubernetes.io/name: spomockserver
+      app.kubernetes.io/instance: spomockserver
+  template:
+    metadata:
+      labels:
+        app: spomockserver
+        app.type: mock
+        app.kubernetes.io/name: spomockserver
+        app.kubernetes.io/instance: spomockserver
+    spec:
+      serviceAccountName: spomockserver
+      securityContext: {}
+      containers:
+        - name: spomockserver
+          image: "spomockserver:1.0.1"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: spomockserver-base-config
+          env:
+            - name: apiresponseURLForAll
+              value: https://spomockserverperf.apps.us-west-2.aws.smarsh.cloud/
+            - name: apiresponseURLforFiles
+              value: https://spomockserverperf.apps.us-west-2.aws.smarsh.cloud/api/v1/uploaded_files/
+          
+ 

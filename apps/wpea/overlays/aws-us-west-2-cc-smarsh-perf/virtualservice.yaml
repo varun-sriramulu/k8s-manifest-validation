@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-wpea-perf
+spec:
+  hosts:
+    - "wpea.cc-perf.internal.smarsh.us-west-2.aws.smarsh.cloud"
+  gateways:
+    - istio-ingress/apps-https-tcp-gw-ep-mt-smarsh-cc-perf
+  http:
+    - route:
+        - destination:
+            host: wpea
+      match:
+      - uri:
+          prefix: "/"    

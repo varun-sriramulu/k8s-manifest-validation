@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yammermockserver
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: yammermockserver
+      app.kubernetes.io/instance: yammermockserver
+  template:
+    spec:
+      containers:
+        - name: yammermockserver
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 100m
+              memory: 2G

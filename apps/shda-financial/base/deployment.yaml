@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: shda-financial
+spec:
+  selector:
+    matchLabels:
+      app: shda-financial
+      app.kubernetes.io/name: shda-financial
+      app.kubernetes.io/instance: shda-financial
+  template:
+    metadata:
+      labels:
+        app: shda-financial
+        app.kubernetes.io/name: shda-financial
+        app.kubernetes.io/instance: shda-financial
+    spec:
+      serviceAccountName: shda-financial
+      securityContext: {}
+      containers:
+        - name: shda-financial
+          image: "shda:6.01.0501"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 180
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /manage/health/readiness
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 180
+          envFrom:
+            - secretRef:
+               name: shda-financial-db
+            - secretRef:
+                name: shda-financial-aws-s3-archive-service
+            - secretRef:
+                name: shda-financial-rmq
+            - configMapRef:
+                name: shda-financial-base-config
+            - configMapRef:
+                name: cc-shared-env-config
+            - configMapRef:
+                name: cc-shared-monitoring-config                 
+
+          env:
+            - name: spring.application.name
+              value: "shda-financial"      
+            - name: SPRING_PROFILES_ACTIVE
+              value: "cloud,k8"
+            - name: SPRING_PROFILES_INCLUDE
+              value: "commercial"              
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=shda-financial"
+            - name: management.metrics.export.datadog.api-key
+              valueFrom:
+                secretKeyRef:
+                  name: cc-datadog-api-key
+                  key: value
+            - name: monitoring.tags.service
+              value: "shda-financial"   

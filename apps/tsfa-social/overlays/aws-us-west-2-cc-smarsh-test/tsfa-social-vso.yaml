@@ -1,0 +1,61 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-social-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-test/aws-s3-capture-service
+
+  destination:
+    name: tsfa-social-aws-s3-capture-service
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-social-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+  
+  path: cloud-capture/cc-test/rmq-cluster
+
+  destination:
+    name: tsfa-social-rmq-cluster
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-social-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-test/ccredis
+
+  destination:
+    name: tsfa-social-redis
+    create: true
+
+  refreshAfter: 30s
+---  
+  
+  
+
+  

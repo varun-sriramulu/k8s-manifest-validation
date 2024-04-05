@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+configMapGenerator:
+- name: ftch-collab-base-config
+  literals:
+  - s3.service.name=aws-s3-capture-service
+  - rmq.cluster.name=rmq-cluster
+  - rds.db.service.name=fetch-db
+  - cache.service.name=ccredis
+  - scheduler.api.worker.tasksToCompleteQueueName=collab-scheduler-callback
+  - scheduler.api.worker.tasksToRunQueueName=collab-scheduler-fetch
+  - fetch.service.executionCreateRequestQueueName=collab-execution-create-request
+  - fetch.service.schedulerCallbackPublisher=coreMsgQueueing
+  - fetch.rmqBinder.fetchQueueName=collab-scheduler-fetch-main
+  - fetch.rmqBinder.callbackQueueName=collab-scheduler-callback-main
+  - scheduler.api.url=http://shda-collab
+  - fetch.migration.isEnabled=true
+  - spring.datasource.driver-class-name=org.postgresql.Driver
+  - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
+  - spring.jpa.properties.hibernate.default-schema=public
+  - spring.jpa.properties.hibernate.jdbc.batch_size=20
+  - spring.jpa.properties.database-platform=org.hibernate.dialect.PostgreSQL9Dialect
+  - spring.jpa.hibernate.ddl-auto=none
+  - spring.liquibase.enabled=true
+  - spring.liquibase.change-log=classpath:datasource/changelog-master.xml
+  - spring.cloud.function.definition=csv-error;csv-chunk;scheduler-fetch-main

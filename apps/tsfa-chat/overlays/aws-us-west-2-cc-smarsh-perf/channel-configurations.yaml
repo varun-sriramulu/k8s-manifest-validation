@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: teams-tsfa-config
+data:
+  msteams.transformer.supportedJoinedSystemEvents: '#Microsoft.Teams.GraphSvc.membersAddedEventMessageDetail,#Microsoft.Teams.GraphSvc.membersJoinedEventMessageDetail,#Microsoft.Teams.GraphSvc.channelAddedEventMessageDetail,#Microsoft.Teams.GraphSvc.teamCreatedEventMessageDetail,#microsoft.graph.membersAddedEventMessageDetail,#microsoft.graph.membersJoinedEventMessageDetail,#microsoft.graph.channelAddedEventMessageDetail,#microsoft.graph.teamCreatedEventMessageDetail'
+  msteams.transformer.supportedLeaveSystemEvents: '#Microsoft.Teams.GraphSvc.membersLeftEventMessageDetail,#Microsoft.Teams.GraphSvc.membersDeletedEventMessageDetail,#microsoft.graph.membersDeletedEventMessageDetail,#microsoft.graph.membersLeftEventMessageDetail'
+
+---

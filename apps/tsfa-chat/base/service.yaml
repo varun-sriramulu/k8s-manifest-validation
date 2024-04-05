@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tsfa-chat
+spec:
+  type: ClusterIP
+  selector:
+    app: tsfa-chat
+    app.kubernetes.io/name: tsfa-chat
+    app.kubernetes.io/instance: tsfa-chat
+  ports:
+    - port: 80
+      targetPort: 8080

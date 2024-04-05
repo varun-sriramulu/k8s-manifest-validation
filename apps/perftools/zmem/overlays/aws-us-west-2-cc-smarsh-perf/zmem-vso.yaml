@@ -1,0 +1,16 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: zmem-aws-s3-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-perf/aws-s3-service
+  destination:
+    name: zmem-aws-s3-service
+    create: true
+    
+  refreshAfter: 30s
+---

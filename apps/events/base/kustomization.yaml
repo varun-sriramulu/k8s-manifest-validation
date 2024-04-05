@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - serviceaccount.yaml
+  - webhook-eventsource.yaml
+  - sensor.yaml
+images:
+ - name: "delivery-ci-base"
+   newName: 593597821733.dkr.ecr.us-west-2.amazonaws.com/ep/delivery-ci-base

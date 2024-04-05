@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cce-smtp
+spec:
+  hosts:
+  - smtp-cc.internal.smarsh.us-west-2.aws.smarsh.cloud
+  gateways:
+  - istio-ingress/apps-https-ingress-ep-mt-smarsh-cc-dev
+  tcp:
+  - match:
+    - port: 25
+    route:
+    - destination:
+        host: cce-smtp

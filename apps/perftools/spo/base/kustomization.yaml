@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+configMapGenerator:
+- name: spomockserver-base-config
+  literals:
+  - spo.itemsCount=1
+  - spo.listssCount=6
+  - spo.mockdomain=https://spomockserver.cc-perf.internal.smarsh.us-west-2.aws.smarsh.cloud/
+  - spo.sitesCount=500
+  - spo.users=500

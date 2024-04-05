@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: igwa
+spec:
+  type: ClusterIP
+  selector:
+    app: igwa
+    app.kubernetes.io/name: igwa
+    app.kubernetes.io/instance: igwa
+  ports:
+    - port: 80
+      targetPort: 8080

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: sssmock
+spec:
+  selector:
+    matchLabels:
+      app: sssmock
+      version: v1
+      app.kubernetes.io/name: sssmock
+      app.kubernetes.io/instance: sssmock
+      app.type: mock
+  template:
+    metadata:
+      labels:
+        app: sssmock
+        version: v1
+        app.kubernetes.io/name: sssmock
+        app.kubernetes.io/instance: sssmock
+        app.type: mock
+    spec:
+      serviceAccountName: sssmock
+      securityContext: {}
+      containers:
+        - name: sssmock
+          image: "sssmock:1.0.0"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+          - name: spring.application.name
+            value: "sssmock"      

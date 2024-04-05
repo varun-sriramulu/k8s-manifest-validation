@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-uaa-external
+spec:
+  hosts:
+    - "hosts"
+  gateways:
+    - gateway
+  http:
+    - name: "UAA get token"
+      route:
+        - destination:
+            host: uaa
+      match:
+      - uri:
+          prefix: "/uaa/oauth/token"
+        method:
+          exact: POST  
+      rewrite:
+        uri: "/oauth/token"         

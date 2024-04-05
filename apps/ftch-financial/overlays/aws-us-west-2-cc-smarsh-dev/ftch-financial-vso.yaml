@@ -1,0 +1,71 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-financial-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-dev/rmq-cluster
+  destination:
+    name: ftch-financial-rmq-cluster
+    create: true
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-financial-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-dev/aws-s3-capture-service
+  destination:
+    name: ftch-financial-aws-s3-capture-service
+    create: true
+    
+  refreshAfter: 30s
+---  
+  
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-financial-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  
+  mount: concourse
+  
+  path: cloud-capture/cc-dev/fetch-db
+
+  destination:
+    name: ftch-financial-db
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-financial-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  
+  path: cloud-capture/cc-dev/ccredis
+  
+  destination:
+    name: ftch-financial-redis
+    create: true
+
+  refreshAfter: 30s
+---  
+  
+  

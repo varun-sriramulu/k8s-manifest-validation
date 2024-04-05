@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: cntu-base-config
+  literals:
+  - s3.service.name=aws-s3-archive-service
+  - sqs.service.name=central-admin-sqs
+  - document.db.service.name=document-db
+  - sftp-service-name=sftp

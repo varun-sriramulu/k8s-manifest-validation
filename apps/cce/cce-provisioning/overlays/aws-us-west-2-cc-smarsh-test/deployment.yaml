@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cce-provisioning
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cce-provisioning
+      app.kubernetes.io/instance: cce-provisioning
+  template:
+    spec:
+      containers:
+        - name: cce-provisioning
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1G
+            requests:
+              cpu: 100m
+              memory: 1G

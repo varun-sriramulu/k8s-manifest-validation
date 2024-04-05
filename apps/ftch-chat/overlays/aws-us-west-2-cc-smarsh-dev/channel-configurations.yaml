@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: teams-ftch-config
+data:
+  teams.chatMessageIdseParticipantGroupCheck: "true"
+  teams.contentUsageCreateExecutionEnabled: "true"
+  teams.contentUsageExecutorEnabled: "true"
+  teams.contentUsageFetchInterval: "PT1H"
+  teams.debug.util.enabled: "true"
+  teams.exportAPISlidingWindowEnabled: "true"
+  teams.exportapi.deleted.teams.capture.enabled: "true"
+  teams.exportapi.message.custom-filter.enabled: "false"
+  teams.featureSharedChannelEnabled: "true"
+  teams.ignoreLicenseErrorFetchInterval: "PT30M"
+  teams.teamMessagesSelectiveCaptureFixEnabled: "true"
+  teams.teamsFetchInterval: "PT02M"
+  teams.usersAssignedPlansCheckInterval: "PT1H"
+  teams.usersSelectiveGroupCheckInterval: "PT01M"
+
+--- 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zoom-ftch-config
+data:
+  zoom.calls.liveDataDelaySeconds: "60"
+  zoom.calls.liveDataExpirationSeconds: "240"
+  zoom.calls.liveDataOverlap: "10"
+  zoom.calls.minimalRequestDateRangeInSeconds: "60"
+  zoom.calls.resiliencyStepPeriod: "300"
+  zoom.enableBreakoutRooms: "true"
+  zoom.enableCommonLibrary: "true"
+  zoom.meetings.liveDataDelaySeconds: "180"
+  zoom.meetings.liveDataExpirationSeconds: "240"
+  zoom.meetings.minimalRequestDateRangeInSeconds: "60"
+  zoom.meetings.resiliencyStepPeriod: "300"
+  zoom.overrideDefaultServiceUrl: "true"
+  zoom.pullAPIEnabled: "true"
+  zoom.sessions.liveDataDelaySeconds: "60"
+  zoom.sessions.liveDataExpirationSeconds: "240"
+  zoom.sessions.liveDataOverlap: "10"
+  zoom.sessions.minimalRequestDateRangeInSeconds: "60"
+  zoom.sessions.resiliencyStepPeriod: "300"
+---  
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slack-ftch-config
+data:
+  slack.metadataBatchSize: "30"
+---  

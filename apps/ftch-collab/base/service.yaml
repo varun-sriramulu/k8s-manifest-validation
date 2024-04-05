@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftch-collab
+spec:
+  type: ClusterIP
+  selector:
+    app: ftch-collab
+    app.kubernetes.io/name: ftch-collab
+    app.kubernetes.io/instance: ftch-collab
+  ports:
+    - port: 80
+      targetPort: 8080

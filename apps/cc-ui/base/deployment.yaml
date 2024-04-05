@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: cc-ui
+spec:
+  selector:
+    matchLabels:
+      app: cc-ui
+      app.kubernetes.io/name: cc-ui
+      app.kubernetes.io/instance: cc-ui
+  template:
+    metadata:
+      labels:
+        app: cc-ui
+        app.kubernetes.io/name: cc-ui
+        app.kubernetes.io/instance: cc-ui
+    spec:
+      serviceAccountName: cc-ui
+      securityContext: {}
+      containers:
+        - name: cc-ui
+          image: "cc-ui:1.0.80"
+          # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: ccui-redis
+            - secretRef:
+                name: ccui-ag-grid
+            - configMapRef:
+                name: ccui-base-config
+            - configMapRef:
+                name: ccui-overlays-config
+          env:
+            - name: uaaClientSecret
+              valueFrom:
+                secretKeyRef:
+                  name: ccui-uaa
+                  key: value

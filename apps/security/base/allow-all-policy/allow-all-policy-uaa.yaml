@@ -1,0 +1,11 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: uaa-allow-access
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: uaa
+  action: ALLOW
+  rules:
+    - {}  

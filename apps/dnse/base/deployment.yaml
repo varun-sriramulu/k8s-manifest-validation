@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: dnse
+spec:
+  selector:
+    matchLabels:
+      app: dnse
+      app.kubernetes.io/name: dnse
+      app.kubernetes.io/instance: dnse
+  template:
+    metadata:
+      labels:
+        app: dnse
+        app.kubernetes.io/name: dnse
+        app.kubernetes.io/instance: dnse
+    spec:
+      serviceAccountName: dnse
+      securityContext: {}
+      containers:
+      - name: dnse
+        image: "dnse:1.0.3"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: dnse-document-db
+        - secretRef:
+            name: dnse-rmq-cluster
+        - configMapRef:
+            name: dnse-base-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config   
+        env:
+        - name: spring.application.name
+          value: "dnse"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"        
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=dnse"
+        - name: monitoring.tags.service
+          value: "dnse"
+        - name: management.datadog.metrics.export.apiKey
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value                  

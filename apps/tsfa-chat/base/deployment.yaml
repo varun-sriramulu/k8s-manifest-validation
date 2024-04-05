@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: tsfa-chat
+spec:
+  selector:
+    matchLabels:
+      app: tsfa-chat
+      app.kubernetes.io/name: tsfa-chat
+      app.kubernetes.io/instance: tsfa-chat
+  template:
+    metadata:
+      labels:
+        app: tsfa-chat
+        app.kubernetes.io/name: tsfa-chat
+        app.kubernetes.io/instance: tsfa-chat
+    spec:
+      serviceAccountName: tsfa-chat
+      securityContext: {}
+      containers:
+      - name: tsfa-chat
+        image: "tsfa-chat:6.1.1141"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: tsfa-chat-aws-s3-capture-service
+        - secretRef:
+            name: tsfa-chat-redis
+        - secretRef:
+            name: tsfa-chat-rmq-cluster
+        - configMapRef:
+            name: tsfa-chat-base-config
+        - configMapRef:
+            name: teams-tsfa-config             
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config                   
+        env:
+        - name: spring.application.name
+          value: "tsfa-chat"
+        - name: application.name
+          value: "transformer-chat-api"
+        - name:  application.id
+          value: "62"             
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: SPRING_PROFILES_INCLUDE
+          value: "commercial"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+        - name: transformer.rmqBinder.queueName
+          value: "tsfa-chat"            
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=tsfa-chat"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+        - name: management.health.redis.enabled
+          value: "true"
+        - name: monitoring.tags.service
+          value: "tsfa-chat"          
+        - name: cache.type
+          value: "redis" 
+
+
+

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtra
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rtra
+      app.kubernetes.io/instance: rtra
+  template:
+    spec:
+      containers:
+        - name: rtra
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4G
+              ephemeral-storage: 2G
+            requests:
+              cpu: 100m
+              memory: 2G
+              ephemeral-storage: 256M

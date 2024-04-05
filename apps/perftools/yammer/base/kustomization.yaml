@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+configMapGenerator:
+- name: yammermockserver-base-config
+  literals:
+  - filecount=1000
+  - totalcountannouncemnt=2000
+  - totalcountofPoll=2000
+  - totalcountofPraise=1000
+  - totalcountofmessages=2000
+  - totalcountquestion=2000
+  - totalusers=1000

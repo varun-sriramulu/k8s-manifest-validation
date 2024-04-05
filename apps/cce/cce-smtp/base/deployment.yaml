@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cce-smtp
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cce-smtp
+      app.kubernetes.io/instance: cce-smtp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cce-smtp
+        app.kubernetes.io/instance: cce-smtp
+      annotations:
+        "sidecar.istio.io/inject": "false"
+    spec:
+      serviceAccountName: cce-smtp
+      securityContext: {}
+      containers:
+        - name: cce-smtp
+          image: ccesmtp:1.0.1
+          command:
+            - ./ea-smtp-storage
+          args:
+            - serve
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: tcp-smtps
+              containerPort: 8080
+              protocol: TCP
+          resources: {}
+          env:
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cce-smtp-s3-access-key
+                  key: value
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cce-smtp-s3-access-secret
+                  key: value
+          envFrom:
+            - configMapRef:
+                name: cce-env-config

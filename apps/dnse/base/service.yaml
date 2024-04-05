@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dnse
+spec:
+  type: ClusterIP
+  selector:
+    app: dnse
+    app.kubernetes.io/name: dnse
+    app.kubernetes.io/instance: dnse
+  ports:
+    - port: 80
+      targetPort: 8080

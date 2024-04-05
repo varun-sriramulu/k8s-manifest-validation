@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: ftch-chat
+spec:
+  selector:
+    matchLabels:
+      app: ftch-chat
+      app.kubernetes.io/name: ftch-chat
+      app.kubernetes.io/instance: ftch-chat
+  template:
+    metadata:
+      labels:
+        app: ftch-chat
+        app.kubernetes.io/name: ftch-chat
+        app.kubernetes.io/instance: ftch-chat
+    spec:
+      serviceAccountName: ftch-chat
+      securityContext: {}
+      containers:
+      - name: ftch-chat
+        image: "ftch-chat:6.01.0181"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 300
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 300
+        envFrom:
+        - secretRef:
+            name: ftch-chat-aws-s3-capture-service
+        - secretRef:
+            name: ftch-chat-redis
+        - secretRef:
+            name: ftch-chat-db
+        - secretRef:
+            name: ftch-chat-rmq-cluster
+        - configMapRef:
+            name: ftch-chat-base-config
+        - configMapRef:
+            name: teams-ftch-config
+        - configMapRef:
+            name: zoom-ftch-config 
+        - configMapRef:
+            name: slack-ftch-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config            
+        env:        
+        - name: spring.application.name
+          value: "ftch-chat"
+        - name: application.name
+          value: "ftch-chat-api"          
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=ftch-chat"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+        - name: management.health.redis.enabled
+          value: "true"
+        - name: monitoring.tags.service
+          value: "ftch-chat"          
+        - name: cache.type
+          value: "redis"          

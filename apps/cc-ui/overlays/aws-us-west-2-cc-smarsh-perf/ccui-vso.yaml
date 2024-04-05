@@ -1,0 +1,69 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ccui-ag-grid
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/ag-grid
+
+  # dest k8s secret
+  destination:
+    name: ccui-ag-grid
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ccui-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/ccredis
+
+  # dest k8s secret
+  destination:
+    name: ccui-redis
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ccui-uaa
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-access-mgmt/uaa/clients/us-west-2/perf/uaasocialappclient
+
+  # dest k8s secret
+  destination:
+    name: ccui-uaa
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---

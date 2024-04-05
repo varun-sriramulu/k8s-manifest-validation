@@ -1,0 +1,49 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-chat-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-perf/aws-s3-capture-service
+  destination:
+    name: tsfa-chat-aws-s3-capture-service
+    create: true
+
+  refreshAfter: 30s
+
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-chat-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-perf/rmq-cluster
+  destination:
+    name: tsfa-chat-rmq-cluster
+    create: true
+  refreshAfter: 30s
+
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: tsfa-chat-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-perf/ccredis
+  destination:
+    name: tsfa-chat-redis
+    create: true
+  refreshAfter: 30s
+---

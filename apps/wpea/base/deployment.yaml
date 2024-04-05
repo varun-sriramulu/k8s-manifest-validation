@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: wpea
+spec:
+  selector:
+    matchLabels:
+      app: wpea
+      app.kubernetes.io/name: wpea
+      app.kubernetes.io/instance: wpea
+  template:
+    metadata:
+      labels:
+        app: wpea
+        app.kubernetes.io/name: wpea
+        app.kubernetes.io/instance: wpea
+    spec:
+      serviceAccountName: wpea
+      securityContext: {}
+      containers:
+      - name: wpea
+        image: "wpea:1.0.106"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: wpea-aws-s3-capture-service
+        - secretRef:
+            name: wpea-rmq-cluster
+        - configMapRef:
+            name: wpea-base-config
+        - configMapRef:
+            name: wpea-overlays-config          
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config            
+        env:
+        - name: spring.application.name
+          value: "wpea"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"        
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=wpea"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"           
+        - name: monitoring.tags.service
+          value: "wpea"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+
+
+

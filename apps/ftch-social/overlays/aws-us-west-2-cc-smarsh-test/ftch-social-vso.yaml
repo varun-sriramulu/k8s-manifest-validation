@@ -1,0 +1,71 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-social-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-test/rmq-cluster
+  destination:
+    name: ftch-social-rmq-cluster
+    create: true
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-social-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  path: cloud-capture/cc-test/aws-s3-capture-service
+  destination:
+    name: ftch-social-aws-s3-capture-service
+    create: true
+    
+  refreshAfter: 30s
+---  
+  
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-social-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  
+  mount: concourse
+  
+  path: cloud-capture/cc-test/fetch-db
+
+  destination:
+    name: ftch-social-db
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-social-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+  
+  path: cloud-capture/cc-test/ccredis
+  
+  destination:
+    name: ftch-social-redis
+    create: true
+
+  refreshAfter: 30s
+---  
+  
+  

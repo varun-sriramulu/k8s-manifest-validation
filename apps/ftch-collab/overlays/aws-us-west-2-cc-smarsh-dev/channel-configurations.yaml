@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sharepoint-ftch-config
+data:
+  sharepoint.maxRetryCount: "1"
+  management.endpoints.web.exposure.include: "env,health"
+  sharepoint.audit.comment.reply: "{\
+            \"webPageLibrary\": \"Site Page\" \
+            }"
+            
+--- 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yammer-ftch-config
+data:
+  yammer.token.encryption.enabled: "true"
+  yammer.monitoring.service.type: opentelemetry
+  yammer.content.encryption.enabled: "true"
+
+---  

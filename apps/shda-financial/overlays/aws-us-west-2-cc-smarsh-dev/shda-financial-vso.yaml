@@ -1,0 +1,56 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-financial-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+
+  path: cloud-capture/cc-dev/scheduler-finance-db
+  destination:
+    name: shda-financial-db
+    create: true
+    
+  refreshAfter: 30s
+--- 
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-financial-rmq
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-dev/rmq-cluster
+
+  destination:
+    name: shda-financial-rmq
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-financial-aws-s3-archive-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-dev/aws-s3-archive-service
+
+  destination:
+    name: shda-financial-aws-s3-archive-service
+    create: true
+
+  refreshAfter: 30s
+---  
+ 

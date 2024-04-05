@@ -1,0 +1,85 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: webhook-cc  
+spec:
+  eventBusName: default.argo-events
+  namespace: argo-events
+  template:
+    container:
+      env:
+        - name: DEBUG_LOG
+          value: "true"
+    serviceAccountName: argo-events-sa
+    namespace: argo-events
+  dependencies:
+    - name: promote
+      eventSourceName: webhook.argo-events
+      namespace: argo-events
+      eventName: promote      
+  triggers:
+    - template:
+        name: webhook-job-trigger
+        k8s:
+          operation: create
+          source:
+            resource:
+              apiVersion: v1
+              kind: Pod
+              metadata:
+                labels:
+                  app-name: promote
+                generateName: promote
+                annotations:
+                  sidecar.istio.io/inject: "false"
+              spec:
+                restartPolicy: Never       
+                containers:
+                  - name: set-concourse-pipeline
+                    image: delivery-ci-base
+                    resources:                    
+                      requests:
+                        memory: "16Mi"
+                        cpu: "25m"
+                      limits:
+                        memory: "24Mi"
+                        cpu: "50m"
+                    args: ["BUILD_VERSION" , "ENV" , "APP_NAME", "NAMESPACE" ]
+                    command:
+                    - bash
+                    - -c
+                    - |
+                      echo $1
+                      git config --global user.name "Concourse CI Bot"
+                      git config --global user.email "ci@localhost"
+                      git clone https://$GITHUB_ACCCESS_TOKEN@github.com/Smarsh/cc-k8-delivery.git
+                      cd cc-k8-delivery
+                      cd $2
+                      cd $4
+                      echo version:$1 > $3.yaml
+                      git add --all
+                      git commit -m ":robot: :warning: Delivery:  App my-app promoted on us-west-2 with 1.0.0  :warning: :robot:"
+                      git push
+                    env:
+                    - name: GITHUB_ACCCESS_TOKEN
+                      valueFrom:
+                        secretKeyRef:
+                          name: github-access-token
+                          key: github-access-token
+          parameters:
+            - src:
+                dependencyName: promote
+                dataKey: body.build_version
+              dest: spec.containers.0.args.1
+            - src:  
+                dependencyName: promote
+                dataKey: body.env
+              dest: spec.containers.0.args.2
+            - src:  
+                dependencyName: promote
+                dataKey: body.app_name
+              dest: spec.containers.0.args.3
+            - src:  
+                dependencyName: promote
+                dataKey: body.namespace
+              dest: spec.containers.0.args.4

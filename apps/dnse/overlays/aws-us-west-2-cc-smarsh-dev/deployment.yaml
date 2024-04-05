@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnse
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dnse
+      app.kubernetes.io/instance: dnse
+  template:
+    spec:
+      containers:
+        - name: dnse
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2G
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 1G
+              ephemeral-storage: 256M
