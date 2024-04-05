@@ -3,6 +3,8 @@ name: Validate Kubernetes Manifests
 on:
   pull_request:
     branches: [ main ]
+    paths:
+      - apps/**
 
 jobs:
   StaticFileValidation:
