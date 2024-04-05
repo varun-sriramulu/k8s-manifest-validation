@@ -15,7 +15,8 @@ jobs:
         uses: tj-actions/changed-files@v14.5
         with:
           files: |
-            {apps}/**/*.{yaml,yml,rego}
+            apps/**
+            # {apps}/**/*.{yaml,yml,rego}
 
       - name: Run step if any of the listed files above 
         if: steps.changed-files-specific.outputs.any_changed == 'true'
