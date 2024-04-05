@@ -1,0 +1,61 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-chat-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/scheduler-chat-db
+
+  destination:
+    name: shda-chat-db
+    create: true
+
+  refreshAfter: 30s
+ 
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-chat-rmq
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/rmq-cluster
+
+  destination:
+    name: shda-chat-rmq-cluster
+    create: true
+
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: shda-chat-aws-s3-archive-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/aws-s3-archive-service
+  
+  destination:
+    name: shda-chat-aws-s3-archive-service
+    create: true
+
+  refreshAfter: 30s
+---  
+
+ 

@@ -1,0 +1,67 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cce-db-hostname
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloudcapture-email/ccemail-provisioning-ccemail-dev-hostname
+  # dest k8s secret
+  destination:
+    name: cce-db-hostname
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cce-db-username
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloudcapture-email/ccemail-provisioning-ccemail-dev-username
+  # dest k8s secret
+  destination:
+    name: cce-db-username
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cce-db-password
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloudcapture-email/ccemail-provisioning-ccemail-dev-password
+  # dest k8s secret
+  destination:
+    name: cce-db-password
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

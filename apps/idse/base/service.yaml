@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: idse
+spec:
+  type: ClusterIP
+  selector:
+    app: idse
+    app.kubernetes.io/name: idse
+    app.kubernetes.io/instance: idse
+  ports:
+    - port: 80
+      targetPort: 8080

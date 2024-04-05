@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-ui
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cc-ui
+      app.kubernetes.io/instance: cc-ui
+  template:
+    spec:
+      containers:
+        - name: cc-ui
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1G
+            requests:
+              cpu: 100m
+              memory: 0.5G

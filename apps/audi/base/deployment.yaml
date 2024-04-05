@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: audi
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: audi
+      app.kubernetes.io/instance: audi
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: audi
+        app.kubernetes.io/instance: audi
+    spec:
+      serviceAccountName: audi
+      securityContext: {}
+      containers:
+      - name: audi
+        image: "audi:1.0.49"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: audi-base-config
+        - configMapRef:
+            name: audi-overlays-config
+        env:
+        - name: uaaClientSecret
+          valueFrom:
+            secretKeyRef:
+              name: audi-uaa
+              key: value

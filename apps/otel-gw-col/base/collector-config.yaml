@@ -1,0 +1,48 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: opentelemetrycollector-gateway
+spec:
+  mode: deployment
+  env:
+  - name: HONEYCOMB_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: honeycomb
+        key: api-token
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          http:
+            endpoint: "0.0.0.0:4318"
+          grpc:
+            endpoint: "0.0.0.0:4317"
+    exporters:
+      # logging:
+      #   verbosity: detailed
+      otlphttp:
+        #endpoint: "api.honeycomb.io:443"
+        endpoint: "http://refinery.ep-honeycomb-refinery.svc.cluster.local"
+        tls:
+          insecure: true
+        headers:
+          "x-honeycomb-team" : "${env:HONEYCOMB_API_KEY}"
+    extensions:
+      health_check:
+    processors:
+      batch:
+      resource:
+        attributes:
+          - key: k8s.injected.metric.from.collector.gateway
+            value: "eks-cluster"
+            action: insert
+    service:
+      telemetry:
+        # logs:
+        #   level: "debug"
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch, resource]
+          exporters: [otlphttp]

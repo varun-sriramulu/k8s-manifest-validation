@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: ftch-social
+spec:
+  selector:
+    matchLabels:
+      app: ftch-social
+      app.kubernetes.io/name: ftch-social
+      app.kubernetes.io/instance: ftch-social
+  template:
+    metadata:
+      labels:
+        app: ftch-social
+        app.kubernetes.io/name: ftch-social
+        app.kubernetes.io/instance: ftch-social
+    spec:
+      serviceAccountName: ftch-social
+      securityContext: {}
+      containers:
+      - name: ftch-social
+        image: "ftch-social:6.01.0066"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: ftch-social-aws-s3-capture-service
+        - secretRef:
+            name: ftch-social-redis
+        - secretRef:
+            name: ftch-social-db
+        - secretRef:
+            name: ftch-social-rmq-cluster
+        - configMapRef:
+            name: ftch-social-base-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config                 
+        env:        
+        - name: spring.application.name
+          value: "ftch-social"
+        - name: application.name
+          value: "ftch-social-api"          
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=ftch-social"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+        - name: management.health.redis.enabled
+          value: "true"
+        - name: monitoring.tags.service
+          value: "ftch-social"          
+        - name: cache.type
+          value: "redis"          
+
+

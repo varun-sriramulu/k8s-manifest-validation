@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: idse-base-config
+  literals:
+  - DB_SERVICE_NAME=identity-db
+  - VAULT_SERVICE_NAME=vault

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: expe-je
+spec:
+  type: ClusterIP
+  selector:
+    app: expe-je
+    app.kubernetes.io/name: expe-je
+    app.kubernetes.io/instance: expe-je
+  ports:
+    - port: 80
+      targetPort: 8080

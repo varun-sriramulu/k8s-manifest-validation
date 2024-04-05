@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cntu
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cntu
+      app.kubernetes.io/instance: cntu
+  template:
+    spec:
+      containers:
+        - name: cntu
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 1000m
+              memory: 1G

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: shda-collab
+spec:
+  selector:
+    matchLabels:
+      app: shda-collab
+      app.kubernetes.io/name: shda-collab
+      app.kubernetes.io/instance: shda-collab
+  template:
+    metadata:
+      labels:
+        app: shda-collab
+        app.kubernetes.io/name: shda-collab
+        app.kubernetes.io/instance: shda-collab
+    spec:
+      serviceAccountName: shda-collab
+      securityContext: {}
+      containers:
+       - name: shda-collab
+         image: "shda:6.1.499"
+         # Image that will be used to containers in the cluster
+         imagePullPolicy: IfNotPresent
+         ports:
+            - containerPort: 8080
+         livenessProbe:
+           httpGet:
+             path: /manage/health/liveness
+             port: 8080
+           initialDelaySeconds: 30
+           periodSeconds: 10
+           timeoutSeconds: 180
+         readinessProbe:
+           httpGet:
+             port: 8080
+             path: /manage/health/readiness
+           initialDelaySeconds: 30
+           periodSeconds: 10
+           timeoutSeconds: 180
+         envFrom:
+         - secretRef:
+              name: shda-collab-db
+         - secretRef:
+              name: shda-collab-aws-s3-archive-service
+         - secretRef:
+              name: shda-collab-rmq-cluster
+         - configMapRef:
+              name: shda-collab-base-config
+         - configMapRef:
+              name: cc-shared-env-config
+         - configMapRef:
+              name: cc-shared-monitoring-config  
+         env:
+           - name: spring.application.name
+             value: "shda-collab"      
+           - name: SPRING_PROFILES_ACTIVE
+             value: "cloud,k8"
+           - name: SPRING_PROFILES_INCLUDE
+             value: "commercial"
+           - name: JAVA_TOOL_OPTIONS
+             value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+           - name: OTEL_RESOURCE_ATTRIBUTES
+             value: "service.name=shda-collab"
+           - name: management.metrics.export.datadog.api-key
+             valueFrom:
+               secretKeyRef:
+                 name: cc-datadog-api-key
+                 key: value
+           - name: monitoring.tags.service
+             value: "shda-collab"         

@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: expe-je
+spec:
+  selector:
+    matchLabels:
+      app: expe-je
+      app.kubernetes.io/name: expe-je
+      app.kubernetes.io/instance: expe-je
+  template:
+    metadata:
+      labels:
+        app: expe-je
+        app.kubernetes.io/name: expe-je
+        app.kubernetes.io/instance: expe-je
+    spec:
+      serviceAccountName: expe-je
+      securityContext: {}
+      containers:
+      - name: expe-je
+        image: "expe:6.01.2341"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: expe-je-aws-s3-archive-service
+        - secretRef:
+            name: expe-je-common-scheduler-db
+        - secretRef:
+            name: expe-je-document-db
+        - secretRef:
+            name: expe-je-rmq-cluster
+        - configMapRef:
+            name: expe-je-base-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config                
+        env:
+        - name: spring.application.name
+          value: "expe-je"
+        - name: SPRING_PROFILES_INCLUDE
+          value: "cloud,k8"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "je"          
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=expe-je"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value          
+        - name: document.db.name
+          value: "workflow-je" 
+
+

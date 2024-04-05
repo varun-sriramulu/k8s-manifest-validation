@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: ftch-financial-base-config
+  literals:
+  - s3.service.name=aws-s3-capture-service
+  - rmq.cluster.name=rmq-cluster
+  - rds.db.service.name=fetch-db
+  - cache.service.name=ccredis
+  - scheduler.api.worker.tasksToCompleteQueueName=financial-scheduler-callback
+  - scheduler.api.worker.tasksToRunQueueName=financial-scheduler-fetch
+  - fetch.service.executionCreateRequestQueueName=financial-execution-create-request

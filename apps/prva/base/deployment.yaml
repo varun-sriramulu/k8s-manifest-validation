@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: prva
+spec:
+  selector:
+    matchLabels:
+      app: prva
+      app.kubernetes.io/name: prva
+      app.kubernetes.io/instance: prva
+  template:
+    metadata:
+      labels:
+        app: prva
+        app.kubernetes.io/name: prva
+        app.kubernetes.io/instance: prva
+    spec:
+      serviceAccountName: prva
+      securityContext: {}
+      containers:
+      - name: prva
+        image: "prva:6.1.1038"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: prva-aws-s3-service
+        - secretRef:
+            name: prva-aws-sqs-service
+        - secretRef:
+            name: prva-central-admin-sqs
+        - secretRef:
+            name: prva-db
+        - secretRef:
+            name: prva-redis
+        - secretRef:
+            name: prva-rmq-cluster
+        - secretRef:
+            name: prva-vault
+        - configMapRef:
+            name: prva-base-config
+        - configMapRef:
+            name: prva-overlays-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config
+                
+        env:
+        - name: spring.application.name
+          value: "prva"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=prva"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"          
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+        - name: uaa.clientId
+          value: "uaasocialappclient"              
+        - name: uaa.clientSecret
+          valueFrom:
+            secretKeyRef:
+              name: prva-uaa-secret
+              key: value              

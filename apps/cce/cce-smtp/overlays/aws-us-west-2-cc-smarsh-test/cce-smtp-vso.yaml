@@ -1,0 +1,44 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cce-smtp-s3-access-key
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloudcapture-email/ea_iam_access_key_id
+  # dest k8s secret
+  destination:
+    name: cce-smtp-s3-access-key
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cce-smtp-s3-access-secret
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloudcapture-email/ea_iam_secret_access_key
+  # dest k8s secret
+  destination:
+    name: cce-smtp-s3-access-secret
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

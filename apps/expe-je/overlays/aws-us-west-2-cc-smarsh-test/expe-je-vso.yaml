@@ -1,0 +1,93 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: expe-je-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/rmq-cluster
+
+  # dest k8s secret
+  destination:
+    name: expe-je-rmq-cluster
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: expe-je-document-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/document-db
+
+  # dest k8s secret
+  destination:
+    name: expe-je-document-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: expe-je-common-scheduler-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/quartz-db
+
+  # dest k8s secret
+  destination:
+    name: expe-je-common-scheduler-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+ 
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: expe-je-aws-s3-archive-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/aws-s3-archive-service
+
+  # dest k8s secret
+  destination:
+    name: expe-je-aws-s3-archive-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---

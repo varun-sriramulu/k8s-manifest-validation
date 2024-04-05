@@ -1,0 +1,11 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: cce-allow-access
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cce-provisioning
+  action: ALLOW
+  rules:
+    - {}  

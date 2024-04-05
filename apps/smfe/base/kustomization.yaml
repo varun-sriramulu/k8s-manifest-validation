@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: smfe-base-config
+  literals:
+  - smfe.export.target.service=proarchive-cc-service
+  - s3.destination.service=aws-s3-smf-cc-service
+  - s3.metadata.service.name=aws-s3-archive-service
+  - rmq.cluster.name=rmq-cluster
+  - smfe.db.service=document-db
+  - scheduler.db.service=quartz-db
+  - cache.service.name=ccredis

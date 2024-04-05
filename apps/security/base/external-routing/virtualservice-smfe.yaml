@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-smfe-external
+spec:
+  hosts:
+    - "hosts"
+  gateways:
+    - gateway
+  http:
+    - name: "Export status acknowledgement"
+      route:
+        - destination:
+            host: smfe
+      match:
+      - uri:
+          prefix: "/smfe/exporter/ack"
+        method:
+          exact: POST  
+      rewrite:
+        uri: "/exporter/ack"         

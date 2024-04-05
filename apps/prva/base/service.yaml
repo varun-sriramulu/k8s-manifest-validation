@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prva
+spec:
+  type: ClusterIP
+  selector:
+    app: prva
+    app.kubernetes.io/name: prva
+    app.kubernetes.io/instance: prva
+  ports:
+    - port: 80
+      targetPort: 8080

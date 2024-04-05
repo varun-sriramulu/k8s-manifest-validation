@@ -1,0 +1,160 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: smfe-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/rmq-cluster
+
+  # dest k8s secret
+  destination:
+    name: smfe-rmq-cluster
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: smfe-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/ccredis
+
+  # dest k8s secret
+  destination:
+    name: smfe-redis
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: smfe-document-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/document-db
+
+  # dest k8s secret
+  destination:
+    name: smfe-document-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: smfe-common-scheduler-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/quartz-db
+
+  # dest k8s secret
+  destination:
+    name: smfe-common-scheduler-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: smfe-aws-s3-archive-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/aws-s3-archive-service
+
+  # dest k8s secret
+  destination:
+    name: smfe-aws-s3-archive-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: proarchive-cc-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/proarchive-cc-service
+
+  # dest k8s secret
+  destination:
+    name: proarchive-cc-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: aws-s3-smf-cc-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/aws-s3-smf-cc-service
+
+  # dest k8s secret
+  destination:
+    name: aws-s3-smf-cc-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

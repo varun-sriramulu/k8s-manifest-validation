@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- admin_client_credentials-secret.yml
+- database-secret.yaml
+- deployment.yaml
+- encryption_keys.yml
+- jwt_policy_signing_keys-secret.yml
+- saml_keys.yml
+- service_account.yml
+- service.yaml

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tsfa-financial
+spec:
+  type: ClusterIP
+  selector:
+    app: tsfa-financial
+    app.kubernetes.io/name: tsfa-financial
+    app.kubernetes.io/instance: tsfa-financial
+  ports:
+    - port: 80
+      targetPort: 8080

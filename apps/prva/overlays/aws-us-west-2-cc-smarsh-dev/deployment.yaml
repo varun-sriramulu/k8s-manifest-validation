@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prva
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prva
+      app.kubernetes.io/instance: prva
+  template:
+    spec:
+      containers:
+        - name: prva
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 2G
+              ephemeral-storage: 256M

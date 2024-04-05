@@ -1,0 +1,37 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: wpea-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+  mount: concourse
+
+  path: cloud-capture/cc-test/rmq-cluster
+
+  destination:
+    name: wpea-rmq-cluster
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: wpea-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-test/aws-s3-capture-service
+
+  destination:
+    name: wpea-aws-s3-capture-service
+    create: true
+
+  refreshAfter: 30s
+---  

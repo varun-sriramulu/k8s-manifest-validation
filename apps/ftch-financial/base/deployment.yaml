@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: ftch-financial
+spec:
+  selector:
+    matchLabels:
+      app: ftch-financial
+      app.kubernetes.io/name: ftch-financial
+      app.kubernetes.io/instance: ftch-financial
+  template:
+    metadata:
+      labels:
+        app: ftch-financial
+        app.kubernetes.io/name: ftch-financial
+        app.kubernetes.io/instance: ftch-financial
+    spec:
+      serviceAccountName: ftch-financial
+      securityContext: {}
+      containers:
+      - name: ftch-financial
+        image: "ftch-financial:1.00.1"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /manage/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /manage/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: ftch-financial-aws-s3-capture-service
+        - secretRef:
+            name: ftch-financial-redis
+        - secretRef:
+            name: ftch-financial-db
+        - secretRef:
+            name: ftch-financial-rmq-cluster
+        - configMapRef:
+            name: ftch-financial-base-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config                 
+        env:        
+        - name: spring.application.name
+          value: "ftch-financial"
+        - name: application.name
+          value: "ftch-financial-api"          
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=ftch-financial"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+        - name: management.health.redis.enabled
+          value: "true"
+        - name: monitoring.tags.service
+          value: "ftch-financial"          
+        - name: cache.type
+          value: "redis"          
+
+

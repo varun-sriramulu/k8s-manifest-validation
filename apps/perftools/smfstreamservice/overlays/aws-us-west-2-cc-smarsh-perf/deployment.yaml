@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sssmock
+spec:
+  selector:
+    matchLabels:
+      app: sssmock
+      version: v1
+      app.kubernetes.io/name: sssmock
+      app.kubernetes.io/instance: sssmock
+  template:
+    spec:
+      containers:
+        - name: sssmock
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1G
+            requests:
+              cpu: 250m
+              memory: 1G

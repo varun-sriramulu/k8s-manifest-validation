@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vtglicense
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vtglicense
+      app.kubernetes.io/instance: vtglicense
+  template:
+    spec:
+      containers:
+        - name: vtglicense
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1G
+            requests:
+              cpu: 1000m
+              memory: 1G

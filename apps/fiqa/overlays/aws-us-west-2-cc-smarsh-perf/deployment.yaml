@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fiqa
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fiqa
+      app.kubernetes.io/instance: fiqa
+  template:
+    spec:
+      containers:
+        - name: fiqa
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 100m
+              memory: 1G

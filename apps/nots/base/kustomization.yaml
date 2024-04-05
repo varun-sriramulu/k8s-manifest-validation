@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+  - deployment.yaml
+  - service.yaml
+  - serviceaccount.yaml
+
+configMapGenerator:
+  - name: nots-base-config
+    literals:
+      - s3.archive.service.name=aws-s3-archive-service
+      - rmq.cluster.name=rmq-cluster
+      - smtp.service.name=smtp-service
+      - notification.service.mail.server.port=587

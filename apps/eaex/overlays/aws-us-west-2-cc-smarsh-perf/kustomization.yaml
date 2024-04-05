@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/cloud-provider: aws
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/service_region: nam
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: perf
+  tenancy.smarsh.com/namespace: cc-smarsh-perf
+  tenancy.smarsh.com/product_family: capture
+  tenancy.smarsh.com/product: cloud_capture
+  tenancy.smarsh.com/deployment-identifier: aws-us-west-2-cc-smarsh-perf
+resources:
+- ../../base
+- keda.yaml
+- virtualservice.yaml
+- eaex-vso.yaml
+patches:
+- path: deployment.yaml
+images:
+- name: "eaex"
+  newName: 593597821733.dkr.ecr.us-west-2.amazonaws.com/cc/eaex
+  newTag: 1.0.0347
+namespace: cc-smarsh-perf
+configMapGenerator:
+- name: eaex-overlays-config
+  literals:
+  - io.netty.leakDetection.level=paranoid
+  - service.exporter.purge.retentionPeriod=20
+  - service.exporter.purge.schedule=0 0/10 * * * ?
+  - service.exporter.purge.limit=100
+  - exporter.consumer.thread.count=2
+  - service.rtra.v1.publish=true
+  - cache.ttl=PT5M

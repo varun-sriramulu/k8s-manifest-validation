@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/cloud-provider: aws
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/service_region: nam
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: perf
+  tenancy.smarsh.com/namespace: cc-smarsh-perf
+  tenancy.smarsh.com/product_family: capture
+  tenancy.smarsh.com/product: cloud_capture
+  tenancy.smarsh.com/deployment-identifier: aws-us-west-2-cc-smarsh-perf
+resources:
+- ../../base
+- hpa.yaml
+- virtualservice.yaml
+- zmem-vso.yaml
+patches:
+- path: deployment.yaml
+images:
+- name: "zmem"
+  newName: 593597821733.dkr.ecr.us-west-2.amazonaws.com/cc/zmem
+  newTag: 0.0.115
+namespace: cc-smarsh-perf
+configMapGenerator:
+- name: zmem-overlays-config
+  literals:
+  - spring.profiles.include="performanceTest"
+  - s3.service.name=aws-s3-capture-service
+  - perf.meetings.meetingCount=100
+  - perf.meetings.userCount=500
+  - perf.meetings.participantCount=10
+  - perf.meetings.chatCount=20
+  - perf.meetings.breakoutMeetingCount=0
+  - perf.meetings.breakoutRoomCount=0
+  - perf.meetings.breakoutParticipantCount=0
+  - perf.meetings.archiveFileSizeRange=XS,S,M
+  - perf.sessions.sessionsCount=100
+  - perf.sessions.sessionSMSCount=10
+  - perf.sessions.sessionAttachmentCount=5
+  - perf.sessions.sessionParticipantCount=5
+  - perf.sessions.userCount=1000
+  - perf.sessions.archiveFileSizeRange=XXS

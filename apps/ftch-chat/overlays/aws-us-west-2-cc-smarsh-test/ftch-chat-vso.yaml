@@ -1,0 +1,95 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-chat-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/rmq-cluster
+
+  # dest k8s secret
+  destination:
+    name: ftch-chat-rmq-cluster
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-chat-aws-s3-capture-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/aws-s3-capture-service
+
+  # dest k8s secret
+  destination:
+    name: ftch-chat-aws-s3-capture-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+  
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-chat-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/fetch-db
+
+  # dest k8s secret
+  destination:
+    name: ftch-chat-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: ftch-chat-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-test/ccredis
+
+  # dest k8s secret
+  destination:
+    name: ftch-chat-redis
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+  

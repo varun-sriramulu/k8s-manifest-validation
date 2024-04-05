@@ -1,0 +1,58 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: crtm-vault
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+  
+  path: cloud-capture/cc-perf/vault
+
+  destination:
+    name: crtm-vault
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: crtm-aws-s3-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/aws-s3-service
+
+  destination:
+    name: crtm-aws-s3-service
+    create: true
+
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: crtm-aws-sqs-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-perf/aws-sqs-service
+
+  destination:
+    name: crtm-aws-sqs-service
+    create: true
+
+  refreshAfter: 30s
+---  
+  

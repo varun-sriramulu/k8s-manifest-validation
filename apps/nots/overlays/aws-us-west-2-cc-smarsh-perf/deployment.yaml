@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nots
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nots
+      app.kubernetes.io/instance: nots
+  template:
+    spec:
+      containers:
+        - name: nots
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+            requests:
+              cpu: 100m
+              memory: 1G
+          env:   
+            - name: logging.level.logs
+              value: INFO

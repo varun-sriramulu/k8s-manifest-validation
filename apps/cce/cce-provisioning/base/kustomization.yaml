@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- serviceaccount.yaml
+- service.yaml
+configMapGenerator:
+- name: cce-base-config
+  literals:
+  - ENABLE_SECURITY=false
+  - SPRING_FLYWAY_LOCATIONS="classpath:db/migration/postgres/"
+  - SPRING_FLYWAY_BASELINEONMIGRATE=true
+  - KAFKA_TOPIC_CREATION=false
+  - COMMON_KAFKA_TOPIC_PREFIX="cce-common"
+  - KAFKA_SECURITY_PROTOCOL="PLAINTEXT"
+  - KAFKA_REPLICATION_FACTOR="1"
+  - KAFKA_TOPIC_PARTITION="1"
+  - KAFKA_RETRIES="2"

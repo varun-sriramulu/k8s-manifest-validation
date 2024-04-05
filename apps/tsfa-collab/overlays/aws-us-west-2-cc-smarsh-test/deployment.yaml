@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsfa-collab
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tsfa-collab
+      app.kubernetes.io/instance: tsfa-collab
+  template:
+    spec:
+      containers:
+        - name: tsfa-collab
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4G
+              ephemeral-storage: 1G
+            requests:
+              cpu: 100m
+              memory: 3G
+              ephemeral-storage: 256M

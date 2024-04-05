@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: test
+  tenancy.smarsh.com/namespace: cc-smarsh-test
+  tenancy.smarsh.com/product: cloud_capture
+resources:
+- ../../base
+- static-secret.yaml
+namespace: cc-smarsh-test
+patches:
+- patch: |-
+    apiVersion: opentelemetry.io/v1alpha1
+    kind: OpenTelemetryCollector
+    metadata:
+      name: opentelemetrycollector-gateway
+    spec:
+      mode: deployment
+      env:
+      - name: HONEYCOMB_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: honeycomb-cc
+            key: value

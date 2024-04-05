@@ -1,0 +1,21 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: cc-datadog-api-key
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/opentelemetry_datadog_apikey
+  # dest k8s secret
+  destination:
+    name: cc-datadog-api-key
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

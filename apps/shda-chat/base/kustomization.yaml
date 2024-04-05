@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: shda-chat-base-config
+  literals:
+  - db.service.name=scheduler-chat-db
+  - s3.service.name=aws-s3-archive-service
+  - rmq.cluster.name=rmq-cluster
+  - scheduler.api.jobExecutionArchiveEnabled=false
+  - scheduler.api.publishJobExecutionStatisticsInDatadog=false
+  - scheduler.feature.publishExecutions.type=ConcurrencyControlledRoundRobin
+  - scheduler.jobexecution.queue=execution-create-request
+  - scheduler.updateRundate.endpoint.enabled=true
+  - scheduler.api.scheduleCallbackQueueName=scheduler-callback
+  - scheduler.api.tasksToRunQueueNamePrefix=scheduler-
+  - scheduler.api.error.queueNamePrefix=scheduler-error- 

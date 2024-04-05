@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-wpea-external
+spec:
+  hosts:
+    - "hosts"
+  gateways:
+    - gateway
+  http:
+    - name: "Validate the token sent from Workplace"
+      route:
+        - destination:
+            host: wpea
+      match:
+      - uri:
+          regex: "/wpea/workplace/subscriptions"
+        method:
+          regex: (GET|POST)  
+      rewrite:
+        uri: "/workplace/subscriptions"
+    - name: "Validate the token sent from Twitter"
+      route:
+        - destination:
+            host: wpea
+      match:
+      - uri:
+          regex: "/wpea/twitter/subscriptions"
+        method:
+          regex: (GET|POST)  
+      rewrite:
+        uri: "/twitter/subscriptions"             

@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/cloud-provider: aws
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/service_region: nam
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: test
+  tenancy.smarsh.com/namespace: cc-smarsh-test
+  tenancy.smarsh.com/product_family: capture
+  tenancy.smarsh.com/product: cloud_capture
+  tenancy.smarsh.com/deployment-identifier: aws-us-west-2-cc-smarsh-test
+resources:
+- ../../base
+- keda.yaml
+- virtualservice.yaml
+- igwa-vso.yaml
+patches:
+- path: deployment.yaml
+images:
+- name: "igwa"
+  newName: 593597821733.dkr.ecr.us-west-2.amazonaws.com/cc/gapi
+  newTag: 2.0.87
+namespace: cc-smarsh-test

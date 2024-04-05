@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cce-smtp
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cce-smtp
+      app.kubernetes.io/instance: cce-smtp
+  template:
+    spec:
+      containers:
+        - name: cce-smtp
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1G
+            requests:
+              cpu: 100m
+              memory: 1G

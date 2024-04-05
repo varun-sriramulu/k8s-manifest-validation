@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crtm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crtm
+      app.kubernetes.io/instance: crtm
+  template:
+    spec:
+      containers:
+        - name: crtm
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2G
+            requests:
+              cpu: 1000m
+              memory: 2G

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shda-collab
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: shda-collab
+      app.kubernetes.io/instance: shda-collab
+  template:
+    spec:
+      containers:
+        - name: shda-collab
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+              ephemeral-storage: 2G
+            requests:
+              cpu: 100m
+              memory: 1G
+              ephemeral-storage: 256M

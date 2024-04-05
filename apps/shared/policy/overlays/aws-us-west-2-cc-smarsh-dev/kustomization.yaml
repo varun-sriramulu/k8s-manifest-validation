@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/cloud-provider: aws
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/service_region: nam
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: dev
+  tenancy.smarsh.com/namespace: cc-smarsh-dev
+  tenancy.smarsh.com/product_family: capture
+  tenancy.smarsh.com/product: cloud_capture
+  tenancy.smarsh.com/deployment-identifier: aws-us-west-2-cc-smarsh-dev
+resources:
+- ../../base
+- pdb.yaml
+namespace: cc-smarsh-dev

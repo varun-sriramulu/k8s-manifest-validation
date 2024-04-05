@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: tsfa-social-base-config
+  literals:
+  - S3_SERVICE_NAME=aws-s3-capture-service
+  - RMQ_CLUSTER_NAME=rmq-cluster
+  - CACHE_SERVICE_NAME=ccredis
+  - SPRING_APPLICATION_NAME=tsfa-social
+  - SPRING_PROFILES_ACTIVE=cloud,k8
+  - SPRING_PROFILES_INCLUDE=commercial
+  - transformer.broker.queueName=transform-social
+  - transformer.broker.errorQueueName=transform-social-error
+  - transformer.broker.threadCount=1

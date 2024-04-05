@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsfa-financial
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tsfa-financial
+      app.kubernetes.io/instance: tsfa-financial
+  template:
+    spec:
+      containers:
+        - name: tsfa-financial
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2G
+              ephemeral-storage: 2G
+            requests:
+              cpu: 1000m
+              memory: 2G
+              ephemeral-storage: 256M

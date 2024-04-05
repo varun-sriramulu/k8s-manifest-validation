@@ -1,0 +1,189 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-db
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/provisioning-db
+
+  # dest k8s secret
+  destination:
+    name: prva-db
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-rmq-cluster
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/rmq-cluster
+
+  # dest k8s secret
+  destination:
+    name: prva-rmq-cluster
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-vault
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/vault
+
+  # dest k8s secret
+  destination:
+    name: prva-vault
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/ccredis
+
+  # dest k8s secret
+  destination:
+    name: prva-redis
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+
+---
+
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-aws-s3-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/aws-s3-service
+
+  # dest k8s secret
+  destination:
+    name: prva-aws-s3-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+
+
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-aws-sqs-service
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/aws-sqs-service
+
+  # dest k8s secret
+  destination:
+    name: prva-aws-sqs-service
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+
+
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-central-admin-sqs
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-perf/central-admin-sqs
+
+  # dest k8s secret
+  destination:
+    name: prva-central-admin-sqs
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: prva-uaa-secret
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  mount: concourse
+
+  path: cloud-capture/cc-access-mgmt/uaa/clients/us-west-2/perf/cc-internal-app
+
+  destination:
+    name: prva-uaa-secret
+    create: true
+
+  refreshAfter: 30s
+---  

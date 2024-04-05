@@ -1,0 +1,22 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: gapi-redis
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-dev/ccredis
+
+  # dest k8s secret
+  destination:
+    name: gapi-redis
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

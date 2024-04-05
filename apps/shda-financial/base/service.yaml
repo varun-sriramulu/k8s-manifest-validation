@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shda-financial
+spec:
+  type: ClusterIP
+  selector:
+    app: shda-financial
+    app.kubernetes.io/name: shda-financial
+    app.kubernetes.io/instance: shda-financial
+  ports:
+    - port: 80
+      targetPort: 8080

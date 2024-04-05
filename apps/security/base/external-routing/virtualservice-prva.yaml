@@ -1,0 +1,126 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cc-route-prva-external
+spec:
+  hosts:
+    - "hosts"
+  gateways:
+    - gateway
+  http:
+    - name: "Enterprise authorization endpoint to Provision"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          regex: "/prva/oauth/([^/]+)(/authorize)$"
+        method:
+          exact: GET  
+      rewrite:
+        uriRegexRewrite:
+          match: "/prva/oauth/([^/]+)(/authorize)$"
+          rewrite: /oauth/\1/authorize  
+    - name: "Authorization callback endpionts to provision"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/oauth/callback"
+        method:
+          exact: GET  
+      rewrite:
+        uri: "/oauth/callback"
+    - name: "Oauth1 social user authorization"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          regex: "/prva/oauth1/([^/]+)(/authorize/user/)([a-z0-9-]+)$"
+        method:
+          exact: GET  
+      rewrite:
+        uriRegexRewrite:
+          match: "/prva/oauth1/([^/]+)(/authorize/user/)([a-z0-9-]+)$"
+          rewrite: /oauth1/\1/authorize/user/\3 
+    - name: "Oauth1 social user callback endpionts to provision"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/oauth1/user/callback"
+        method:
+          exact: GET  
+      rewrite:
+        uri: "/oauth1/user/callback"
+    - name: "Oauth social user authorization"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          regex: "/prva/oauth/([^/]+)(/authorize/user/)([a-z0-9-]+)$"
+        method:
+          exact: GET  
+      rewrite:
+        uriRegexRewrite:
+          match: "/prva/oauth/([^/]+)(/authorize/user/)([a-z0-9-]+)$"
+          rewrite: /oauth/\1/authorize/user/\3 
+    - name: "Oauth social user callback endpionts to provision"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/oauth/user/callback"
+        method:
+          exact: GET  
+      rewrite:
+        uri: "/oauth/user/callback"
+    - name: "feeds management"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/feeds/"
+        method:
+          regex: (GET|PATCH|PUT)  
+      rewrite:
+        uri: "/feeds/"
+    - name: "client management"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/client/"
+        method:
+          regex: (GET|POST)  
+      rewrite:
+        uri: "/client/"
+    - name: "Authorization status"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/provisioning/auth/statuses"
+        method:
+          exact: GET  
+      rewrite:
+        uri: "/provisioning/auth/statuses"
+    - name: "Authorization feed creation"
+      route:
+        - destination:
+            host: prva
+      match:
+      - uri:
+          prefix: "/prva/auth/feeds"
+        method:
+          exact: POST  
+      rewrite:
+        uri: "/auth/feeds"                         

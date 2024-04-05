@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: zmem
+spec:
+  selector:
+    matchLabels:
+      app: zmem
+      app.type: mock
+      app.kubernetes.io/name: zmem
+      app.kubernetes.io/instance: zmem
+  template:
+    metadata:
+      labels:
+        app: zmem
+        app.type: mock
+        app.kubernetes.io/name: zmem
+        app.kubernetes.io/instance: zmem
+    spec:
+      serviceAccountName: zmem
+      securityContext: {}
+      containers:
+      - name: zmem
+        image: "zmem:110"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: zmem-aws-s3-service
+        - configMapRef:
+            name: zmem-overlays-config
+        env:
+        - name: spring.application.name
+          value: "zmem"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "k8"

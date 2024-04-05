@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shda-chat
+spec:
+  type: ClusterIP
+  selector:
+    app: shda-chat
+    app.kubernetes.io/name: shda-chat
+    app.kubernetes.io/instance: shda-chat
+  ports:
+    - port: 80
+      targetPort: 8080

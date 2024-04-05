@@ -1,0 +1,23 @@
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: audi-uaa
+  namespace: cc-smarsh-perf
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  type: kv-v2
+
+  # mount path
+  mount: concourse
+
+  # path of the secret
+  path: cloud-capture/cc-access-mgmt/uaa/clients/us-west-2/perf/cc-internal-app
+
+  # dest k8s secret
+  destination:
+    name: audi-uaa
+    create: true
+
+  # static secret refresh interval
+  refreshAfter: 30s

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teamsmockserver
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: teamsmockserver
+      app.kubernetes.io/instance: teamsmockserver
+  template:
+    spec:
+      containers:
+        - name: teamsmockserver
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+            requests:
+              cpu: 100m
+              memory: 2G

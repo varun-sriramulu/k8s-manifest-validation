@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sharepoint-ftch-config
+data:
+  sharepoint.maxRetryCount: "1"
+  sharepoint.graphApiBaseUrl: "https://spomockserver.cc-perf.internal.smarsh.us-west-2.aws.smarsh.cloud/"
+
+
+
+--- 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yammer-ftch-config
+data:
+  yammer.token.encryption.enabled: "true"
+  yammer.monitoring.service.type: opentelemetry
+  yammer.content.encryption.enabled: "true"
+  yammer.records-per-page: "500"
+
+---  

@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: prva-base-config
+  literals:
+  - s3.service.name=aws-s3-capture-service
+  - rmq.cluster.name=rmq-cluster
+  - rds.db.service.name=provisioning-db
+  - cache.service.name=ccredis
+  - sqs.service.name=aws-sqs-service
+  - cada.sqs.service.name=central-admin-sqs
+  - VAULT_SERVICE_NAME=vault
+  - monitoring.tags.service=prva
+  - provisioning.api.uaa.enabled=true
+  - webhook.notification.host=http://localhost:8080
+  - cache.type=redis
+  - management.health.redis.enabled=true

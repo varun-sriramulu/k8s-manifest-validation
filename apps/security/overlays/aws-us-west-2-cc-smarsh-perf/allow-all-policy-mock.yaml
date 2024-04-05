@@ -1,0 +1,11 @@
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: mock-allow-access
+spec:
+  selector:
+    matchLabels:
+      app.type: mock
+  action: ALLOW
+  rules:
+    - {}  

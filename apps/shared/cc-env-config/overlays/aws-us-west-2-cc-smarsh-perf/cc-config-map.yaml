@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cc-shared-monitoring-config
+data:
+  monitoring.tags.segment: enterprise
+  monitoring.tags.product: cloud-capture
+  monitoring.tags.product_family: capture
+  monitoring.tags.feature: capture
+  monitoring.tags.customer: multicustomer
+  monitoring.tags.cloud_provider: aws
+  monitoring.tags.service_region: oregon
+  monitoring.tags.component: application
+  monitoring.tags.entity: multicustomer-oregon
+  monitoring.tags.namespace: cc-smarsh-perf
+  monitoring.tags.environment: multicustomer-oregon-cloud-capture-perf    
+  monitoring.tags.foundation: aws-us_west_2
+  monitoring.tags.cloud_region: us-west-2
+  monitoring.tags.tier: perf
+  monitoring.tags.platform: k8s
+  OTEL_INSTRUMENTATION_RABBITMQ_ENABLED: "false"
+  OTEL_INSTRUMENTATION_GRPC_ENABLED: "false"
+  OTEL_INSTRUMENTATION_TOMCAT_ENABLED: "false"
+  OTEL_INSTRUMENTATION_AWS_SDK_ENABLED: "false"
+  OTEL_INSTRUMENTATION_MONGO_ENABLED: "false"
+  OTEL_INSTRUMENTATION_EXTERNAL_ANNOTATIONS_ENABLED: "false"
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetrycollector-gateway-collector.cc-smarsh-perf.svc.cluster.local:4320
+  management.metrics.export.datadog.enabled: "false" 
+  logging.level.com.smarsh.core.services.messagequeueing.impl.service.endpoint.RabbitMQJmsTemplateQueueEndpoint: FATAL 
+  logging.level.com.smarsh.core.services.messagequeueing.impl.service.pool.TransactionalCallbackPool: FATAL
+  logging.level.logs: FATAL
+  logging.level.io.opentelemetry.exporter.logging.LoggingSpanExporter: FATAL    
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cc-shared-env-config
+data:
+  deployment.name: "k8"
+  target.deployment.name: "k8" 

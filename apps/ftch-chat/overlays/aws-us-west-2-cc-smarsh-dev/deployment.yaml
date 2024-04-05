@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftch-chat
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ftch-chat
+      app.kubernetes.io/instance: ftch-chat
+  template:
+    spec:
+      containers:
+        - name: ftch-chat
+          resources:
+            limits:
+              cpu: 3000m
+              memory: 4G
+              ephemeral-storage: 3G
+            requests:
+              cpu: 2000m
+              memory: 3G
+              ephemeral-storage: 1G

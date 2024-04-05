@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idse
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: idse
+      app.kubernetes.io/instance: idse
+  template:
+    spec:
+      containers:
+        - name: idse
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2G
+            requests:
+              cpu: 100m
+              memory: 1G

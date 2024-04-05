@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  tenancy.smarsh.com/cloud-provider: aws
+  tenancy.smarsh.com/region: us-west-2
+  tenancy.smarsh.com/service_region: nam
+  tenancy.smarsh.com/customer: smarsh
+  tenancy.smarsh.com/tier: perf
+  tenancy.smarsh.com/namespace: cc-smarsh-perf
+  tenancy.smarsh.com/product_family: capture
+  tenancy.smarsh.com/product: cloud_capture
+  tenancy.smarsh.com/deployment-identifier: aws-us-west-2-cc-smarsh-perf
+resources:
+- ../../base
+- virtualservice.yaml
+- cce-vso.yaml
+patches:
+- path: deployment.yaml
+configMapGenerator:
+- name: cce-env-config
+  literals:
+  - SPRING_FLYWAY_BASELINEONMIGRATE=true
+  - DEFAULT_SMTP_DOMAIN="smtp.cc.test.us-west-2.aws.smarsh.cloud"
+  - KAFKA_TOPIC_CREATION=false
+  - COMMON_KAFKA_TOPIC_PREFIX="cce-common-qa"
+  - PRIORITIES_TOPIC_CREATION="1,2"
+images:
+- name: "cceprovisioning"
+  newName: 593597821733.dkr.ecr.us-west-2.amazonaws.com/cc/cce-provisioning
+  newTag: 1.0.0079
+namespace: cc-smarsh-perf

@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+  org: Smarsh
+resources:
+- deployment.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: crtm-base-config
+  literals:
+  - s3.service.name=aws-s3-service
+  - sqs.service.name=aws-sqs-service
+  - vault.service.name=vault
+  - keystore.pkcs12.keyProtectionAlgorithm=PBEWithHmacSHA256AndAES_256
+  - CERTIFICATE_MANAGER_CONTROLLERS_ENABLED='true'
+  - CERTIFICATE_MANAGER_CERTIFICATES_EXPIREDCERTIFICATESCLEANUPTHRESHOLDDAY=0
+  - CERTIFICATE_MANAGER_TOKENS_EXPIREDTOKENSCLEANUPTHRESHOLDDAYS=0
+  - certificate.manager.legacy.actors=salesforce,central-admin-api,dev-emcc,test-automation

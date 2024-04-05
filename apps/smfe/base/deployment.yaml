@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: smfe
+spec:
+  selector:
+    matchLabels:
+      app: smfe
+      app.kubernetes.io/name: smfe
+      app.kubernetes.io/instance: smfe
+  template:
+    metadata:
+      labels:
+        app: smfe
+        app.kubernetes.io/name: smfe
+        app.kubernetes.io/instance: smfe
+    spec:
+      serviceAccountName: smfe
+      securityContext: {}
+      containers:
+      - name: smfe
+        image: "smfe:2.0.0326"
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/readiness
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 180
+        envFrom:
+        - secretRef:
+            name: smfe-aws-s3-archive-service
+        - secretRef:
+            name: aws-s3-smf-cc-service
+        - secretRef:
+            name: proarchive-cc-service
+        - secretRef:
+            name: smfe-common-scheduler-db
+        - secretRef:
+            name: smfe-document-db
+        - secretRef:
+            name: smfe-rmq-cluster
+        - secretRef:
+            name: smfe-redis            
+        - configMapRef:
+            name: smfe-base-config
+        - configMapRef:
+            name: smfe-overlays-config
+        - configMapRef:
+            name: cc-shared-env-config
+        - configMapRef:
+            name: cc-shared-monitoring-config
+        env:
+        - name: spring.application.name
+          value: "smfe"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "cloud,k8"
+        - name: JAVA_TOOL_OPTIONS
+          value: "-javaagent:/opt/app/opentelemetry-javaagent.jar"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=smfe"
+        - name: monitoring.tags.service
+          value: "smfe"
+        - name: management.metrics.export.datadog.api-key
+          valueFrom:
+            secretKeyRef:
+              name: cc-datadog-api-key
+              key: value
+
+
+

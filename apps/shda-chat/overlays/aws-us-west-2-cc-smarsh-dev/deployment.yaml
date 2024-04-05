@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shda-chat
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: shda-chat
+      app.kubernetes.io/instance: shda-chat
+  template:
+    spec:
+      containers:
+        - name: shda-chat
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3G
+              ephemeral-storage: 2G
+            requests:
+              cpu: 100m
+              memory: 2G
+              ephemeral-storage: 256M
