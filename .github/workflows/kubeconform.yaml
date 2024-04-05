@@ -29,7 +29,14 @@ jobs:
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
           for file in ${{ steps.changed-files-specific.outputs.all_changed_files }}; do
-            echo "$file was modified. Directory: $(dirname "$file")"
+            parentDir = $(dirname "$file");
+            parentDirName = $(basename "$parentDir");
+            echo "$file was modified. Directory: $parentDir, Name: $parentDirName"
+            # if [] || []; then
+            #   echo "changes_exist=true" >> $GITHUB_ENV
+            # else
+            #   echo "changes_exist=false" >> $GITHUB_ENV
+            # fi
           done
 
       - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
