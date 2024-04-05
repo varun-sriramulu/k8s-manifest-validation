@@ -14,11 +14,12 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v14.5
         with:
+          json: true
+          write_output_files: true
+          dir_names: "true"
           files: |
             apps/**
             *.{yaml,yml}
-          json: true
-          write_output_files: true
 
       - name: Run step if any of the listed files above 
         if: steps.changed-files-specific.outputs.any_changed == 'true'
