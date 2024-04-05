@@ -18,8 +18,10 @@ jobs:
           write_output_files: true
           dir_names: "true"
           files: |
-            **/*.yaml
-            **/*.yml
+            apps/**/**/*.yaml
+            apps/**/**/*.yml
+            apps/**/*.yaml
+            apps/**/*.yml
           files_ignore: |
             **/*.rego
 
