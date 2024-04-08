@@ -30,7 +30,7 @@ jobs:
         env:
           changedFiles: ${{ steps.changed-files-specific.outputs.all_changed_files }}
         run: |
-          . /scripts/conftest/conftest_validator.sh ${{ steps.changed_files.outputs.all_changed_files }}
+          . scripts/conftest/conftest_validator.sh ${{ steps.changed_files.outputs.all_changed_files }}
 
       - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
         uses: yokawasa/action-setup-kube-tools@v0.11.0
