@@ -10,7 +10,8 @@ for file in ${changedFiles}; do
             echo "$file was modified. Path: $parentDirPath, Name: $parentDirName"
             
             if [ "$parentDirName" == "base" ] || [ "$parentDirName" == "overlays" ]; then
-              export appDirPath=$(dirname "$parentDirPath")
+              appDirPath=$(dirname "$parentDirPath")
+              echo "appDirPath=$appDirPath" >> $GITHUB_ENV
               appDirName=$(basename "$(dirname "$parentDirPath")")
               echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
             else
