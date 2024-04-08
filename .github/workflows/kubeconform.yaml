@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  parentDir: ''
+  parentDirName: ''
+  
 jobs:
   StaticFileValidation:
     runs-on: ubuntu-latest
@@ -30,9 +34,11 @@ jobs:
         shell: bash
         run: |
           for file in ${{ steps.changed-files-specific.outputs.all_changed_files }}; do
-            parentDir = $(dirname "$file");
-            parentDirName = $(basename "$parentDir");
-            echo "$file was modified. Directory: $parentDir, Name: $parentDirName"
+            # parentDir = $(dirname "$file");
+            # parentDirName = $(basename "$(dirname "$file")");
+            
+            echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
+            
             # if [] || []; then
             #   echo "changes_exist=true" >> $GITHUB_ENV
             # else
