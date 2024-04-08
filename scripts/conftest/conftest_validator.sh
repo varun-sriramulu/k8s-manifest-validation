@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 
-for file in $1; do 
+echo "aaaaaaaa: ${changedFiles}"
+for file in ${changedFiles}; do 
             echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
             
             # if [] || []; then
