@@ -15,6 +15,7 @@ for file in ${changedFiles}; do
               appDirName=$(basename "$(dirname "$parentDirPath")")
               echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
               appsToValidate+=($appDirPath)
+              appsToValidate+=($appDirPath)
             else
               echo "Terminating.. Change occurred in a file other than base and overlays dir."
             fi
