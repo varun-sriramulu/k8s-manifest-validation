@@ -5,8 +5,8 @@ echo "List of changed files: ${changedFiles}"
 for file in ${changedFiles}; do 
             # echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
 
-            parentDirPath = $(dirname "$file")
-            parentDirName = $(basename "$(dirname "$file")")
+            parentDirPath=$(dirname "$file")
+            parentDirName=$(basename "$(dirname "$file")")
             
             echo "$file was modified. Path: $parentDirPath, Name: $parentDirName"
             
