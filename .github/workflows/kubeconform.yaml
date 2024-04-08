@@ -34,16 +34,7 @@ jobs:
         env:
           changedFiles: ${{ steps.changed-files-specific.outputs.all_changed_files }}
         shell: bash
-        run: |
-          for file in ${changedFiles}; do          
-            echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
-            
-            # if [] || []; then
-            #   echo "changes_exist=true" >> $GITHUB_ENV
-            # else
-            #   echo "changes_exist=false" >> $GITHUB_ENV
-            # fi
-          done
+        run: ./scripts/conftest/conftest_validator.sh -r ${{ steps.changed_files.outputs.all_changed_files }}
 
       - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
         uses: yokawasa/action-setup-kube-tools@v0.11.0
