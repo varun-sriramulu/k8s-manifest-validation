@@ -22,4 +22,4 @@ for file in ${changedFiles}; do
             fi
           done
 
-          echo "appsToValidate=$appDirPath" >> $GITHUB_ENV
+          echo "appsToValidate=$appsToValidate" >> $GITHUB_ENV
