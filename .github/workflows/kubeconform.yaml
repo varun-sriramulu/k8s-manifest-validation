@@ -33,13 +33,10 @@ jobs:
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         env:
           changedFiles: ${{ steps.changed-files-specific.outputs.all_changed_files }}
-          parentDir: $(dirname "$file")
-          parentDirName: $(basename "$(dirname "$file")")
         shell: bash
         run: |
-          for file in ${changedFiles}; do
+          for file in ${changedFiles}; do          
             echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
-            echo "$file was modified. Directory: ${parentDir}, Name: ${parentDirName}"
             
             # if [] || []; then
             #   echo "changes_exist=true" >> $GITHUB_ENV
