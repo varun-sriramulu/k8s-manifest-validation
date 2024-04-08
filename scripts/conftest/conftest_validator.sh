@@ -10,7 +10,7 @@ for file in ${changedFiles}; do
             echo "$file was modified. Path: $parentDirPath, Name: $parentDirName"
             
             if [ "$parentDirName" == "base" ] || [ "$parentDirName" == "overlays" ]; then
-              appDirPath=$(dirname "$parentDirPath")
+              export appDirPath=$(dirname "$parentDirPath")
               appDirName=$(basename "$(dirname "$parentDirPath")")
               echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
             else
