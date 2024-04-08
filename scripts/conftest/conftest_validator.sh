@@ -2,6 +2,7 @@
 
 
 echo "List of changed files: ${changedFiles}"
+appsToValidate=()
 for file in ${changedFiles}; do 
             # echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
 
@@ -10,11 +11,13 @@ for file in ${changedFiles}; do
             echo "$file was modified. Path: $parentDirPath, Name: $parentDirName"
             
             if [ "$parentDirName" == "base" ] || [ "$parentDirName" == "overlays" ]; then
-              appDirPath=$(dirname "$parentDirPath")
-              echo "appDirPath=$appDirPath" >> $GITHUB_ENV
+              appDirPath=$(dirname "$parentDirPath")              
               appDirName=$(basename "$(dirname "$parentDirPath")")
               echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
+              appsToValidate+=($appDirPath)
             else
               echo "Terminating.. Change occurred in a file other than base and overlays dir."
             fi
           done
+
+          echo "appsToValidate=$appDirPath" >> $GITHUB_ENV
