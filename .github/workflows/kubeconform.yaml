@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  parentDir: ''
+  parentDirName: ''
+  
 jobs:
   StaticFileValidation:
     runs-on: ubuntu-latest
@@ -14,15 +18,23 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v14.5
         with:
+          json: true
+          write_output_files: true
+          dir_names: "true"
           files: |
-            Dir*\*
+            apps/**/**/*.yaml
+            apps/**/**/*.yml
+            apps/**/*.yaml
+            apps/**/*.yml
+          files_ignore: |
+            **/*.rego
 
       - name: Run step if any of the listed files above 
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: |
-          for file in ${{ steps.changed-files-specific.outputs. all_changed_files }}; do
-            echo "$file was modified"
-          done
+        env:
+          changedFiles: ${{ steps.changed-files-specific.outputs.all_changed_files }}
+        shell: bash
+        run: ./scripts/conftest/conftest_validator.sh -r ${{ steps.changed_files.outputs.all_changed_files }}
 
       - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
         uses: yokawasa/action-setup-kube-tools@v0.11.0
