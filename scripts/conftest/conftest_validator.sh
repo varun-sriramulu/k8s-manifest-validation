@@ -2,7 +2,7 @@
 
 
 echo "List of changed files: ${changedFiles}"
-appsToValidate=()
+declare -a appsToValidate=()
 for file in ${changedFiles}; do 
             # echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
 
