@@ -15,7 +15,7 @@ spec:
     spec:
       serviceAccountName: kymc
       securityContext: {
-        runAsNonRoot: false
+        runAsNonRoot: true
       }
       containers:
         - name: kymc
