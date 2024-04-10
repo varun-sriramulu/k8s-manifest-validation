@@ -2,7 +2,7 @@
 
 
 echo "List of changed files: ${changedFiles}"
-declare -a appsToValidate=()
+appsToValidate=""
 for file in ${changedFiles}; do 
             # echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
 
@@ -14,11 +14,10 @@ for file in ${changedFiles}; do
               appDirPath=$(dirname "$parentDirPath")              
               appDirName=$(basename "$(dirname "$parentDirPath")")
               echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
-              appsToValidate+=($appDirPath)
-              appsToValidate+=('aaaa')
-              appsToValidate+=('bbbb')
+              appsToValidate+=$appDirPath
+              appsToValidate+=" "            
             else
-              echo "Terminating.. Change occurred in a file other than base and overlays dir."
+              echo "Change occurred in a file other than base and overlays dir."
             fi
           done
 
