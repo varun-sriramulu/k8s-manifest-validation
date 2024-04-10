@@ -44,6 +44,7 @@ jobs:
           conftest: '0.50.0'
       - run: |
           echo "******************** Validating Dev Manifests **********************"
+          echo "Changed apps: ${appsToValidate}"
           for app in ${appsToValidate}; do
             echo "Changed app: $app"
           done
