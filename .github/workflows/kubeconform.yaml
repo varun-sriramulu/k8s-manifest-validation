@@ -43,7 +43,7 @@ jobs:
           kustomize: '4.5.7'
           conftest: '0.50.0'
       - run: |
-          echo "******************** Validating Dev Manifests **********************"
+          echo "******************** Validating Dev Manifests ************************"
           echo "Changed apps: ${appsToValidate}"
           
           for app in ${appsToValidate}; do
