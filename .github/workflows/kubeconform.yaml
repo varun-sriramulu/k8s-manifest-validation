@@ -3,7 +3,7 @@ name: Validate Kubernetes Manifests
 on:
   pull_request:
     branches: [ main ]
-
+  
 jobs:
   StaticFileValidation:
     runs-on: ubuntu-latest
@@ -14,15 +14,23 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v14.5
         with:
+          json: true
+          write_output_files: true
+          dir_names: "true"
           files: |
-            Dir*\*
+            apps/**/**/*.yaml
+            apps/**/**/*.yml
+            apps/**/*.yaml
+            apps/**/*.yml
+          files_ignore: |
+            **/*.rego
 
       - name: Run step if any of the listed files above 
         if: steps.changed-files-specific.outputs.any_changed == 'true'
+        env:
+          changedFiles: ${{ steps.changed-files-specific.outputs.all_changed_files }}
         run: |
-          for file in ${{ steps.changed-files-specific.outputs. all_changed_files }}; do
-            echo "$file was modified"
-          done
+          . scripts/conftest/conftest_validator.sh ${{ steps.changed_files.outputs.all_changed_files }}
 
       - name: Run static file validation with tools KubeConform, ConfTest & Kustomize
         uses: yokawasa/action-setup-kube-tools@v0.11.0
@@ -35,7 +43,11 @@ jobs:
           kustomize: '4.5.7'
           conftest: '0.50.0'
       - run: |
-          echo "******************** Validating Dev Manifests ***********************"
+          echo "******************** Validating Dev Manifests **********************"
+          for app in ${appsToValidate}; do
+            echo "Changed app: $app"
+          done
+          
           kustomize build apps/my-web-app/overlays/aws-us-west-2-cc-smarsh-dev -o dev_consolidated_manifest.yaml
           echo -e "--------- CONSOLIDATED MANIFEST ---------- \n$(cat dev_consolidated_manifest.yaml)"
           kustomize build apps/my-web-app/overlays/aws-us-west-2-cc-smarsh-dev
