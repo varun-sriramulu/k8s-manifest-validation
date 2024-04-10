@@ -22,7 +22,7 @@ for file in ${changedFiles}; do
               appsToValidate+=", "
               appsToValidate+="bbbb"
             else
-              echo "Terminating.. Change occurred in a file other than base and overlays dir."
+              echo "Change occurred in a file other than base and overlays dir."
             fi
           done
 
