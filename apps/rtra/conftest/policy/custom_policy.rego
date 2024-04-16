@@ -39,3 +39,16 @@ deny[msg] {
 	not required_deployment_labels
 	msg = sprintf("%s must include Kubernetes recommended labels: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/#labels", [name])
 }
+
+#Enforce the use of only approved golden images in Dockerfiles
+#Ensure that containers never run as a privileged user
+#Ensure that all containers have network policies
+#Ensure that the latest vendor updates are always installed in a container
+#Ensure that all deployments go to a dedicated namespace with proper technical, business, and security labels
+#Ensure that all production deployments have a minimum number of replicas
+#Avoid using StatefulSets unless a use case is understood and acknowledged
+#Ensure that all pods have readiness and liveliness probes
+#Ensure that all pods set resource requirements and limits
+#Ensure that all pods emit prometheus metrics
+#Ensure pod disruption budgets are in place
+#Block apps from using untracked persistent volumes that might contain state
