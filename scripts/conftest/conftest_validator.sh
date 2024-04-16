@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 
 
-for file in $1; do 
-            echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
+echo "List of changed files: ${changedFiles}"
+declare -a appsToValidate=()
+for file in ${changedFiles}; do 
+            # echo "$file was modified. Directory: $(dirname "$file"), Name: $(basename "$(dirname "$file")")"
+
+            parentDirPath=$(dirname "$file")
+            parentDirName=$(basename "$(dirname "$file")")
+            echo "$file was modified. Path: $parentDirPath, Name: $parentDirName"
             
-            # if [] || []; then
-            #   echo "changes_exist=true" >> $GITHUB_ENV
-            # else
-            #   echo "changes_exist=false" >> $GITHUB_ENV
-            # fi
+            if [ "$parentDirName" == "base" ] || [ "$parentDirName" == "overlays" ]; then
+              appDirPath=$(dirname "$parentDirPath")              
+              appDirName=$(basename "$(dirname "$parentDirPath")")
+              echo "App manifest was modified. Path: $appDirPath, Name: $appDirName"
+              appsToValidate+=($appDirPath)
+              appsToValidate+=('aaaa')
+              appsToValidate+=('bbbb')
+            else
+              echo "Terminating.. Change occurred in a file other than base and overlays dir."
+            fi
           done
+
+          echo "appsToValidate=$appsToValidate" >> $GITHUB_ENV
