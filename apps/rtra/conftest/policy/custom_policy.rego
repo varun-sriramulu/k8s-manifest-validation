@@ -18,5 +18,5 @@ deny[msg] {
   input.kind = "Service"
   input.metadata.name != "none"
   input.spec.type = "NodePort"
-  msg = sprintf("The Service[%s] must not be a NodePort. It should be LoadBalancer or ClusterIp", [input.metadata.name, env])
+  msg = sprintf("The Service[%s] must not be a NodePort. It should be LoadBalancer or ClusterIp", [input.metadata.name])
 }
