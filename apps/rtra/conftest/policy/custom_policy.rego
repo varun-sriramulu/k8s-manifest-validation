@@ -7,14 +7,12 @@ name := input.metadata.name
 deny[msg] {
   input.kind == "Deployment"
   not input.spec.template.spec.securityContext.runAsNonRoot
-
   msg := "Containers must not run as root"
 }
 
 deny[msg] {
   input.kind == "Deployment"
   not input.spec.selector.matchLabels.app
-
   msg := "Containers must provide app label for pod selectors"
 }
 
@@ -26,9 +24,8 @@ deny[msg] {
 }
 
 deny[msg] {
-  input.kind == "PodDisruptionBudget"
+  input.kind = "PodDisruptionBudget"
   not input.spec.minAvailable
-
   msg := "Pod disruption budget should be configured for high availability"
 }
 
