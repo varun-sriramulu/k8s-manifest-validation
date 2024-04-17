@@ -25,6 +25,13 @@ deny[msg] {
   msg = sprintf("The Service[%s] must not be a NodePort. It should be LoadBalancer or ClusterIp", [input.metadata.name])
 }
 
+deny[msg] {
+  input.kind == "PodDisruptionBudget"
+  not input.spec.minAvailable
+
+  msg := "Pod disruption budget should be configured for high availability"
+}
+
 required_deployment_labels {
 	input.metadata.labels["app.kubernetes.io/name"]
 	input.metadata.labels["app.kubernetes.io/instance"]
