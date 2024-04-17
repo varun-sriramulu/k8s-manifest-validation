@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: rtra
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: rtra
     app.kubernetes.io/name: rtra

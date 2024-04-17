@@ -43,12 +43,12 @@ jobs:
           kustomize: '4.5.7'
           conftest: '0.50.0'
       - run: |
-          echo "******************** Validating Dev Manifests **********************"
           echo "Changed apps: ${appsToValidate}"
           
           for app in ${appsToValidate}; do
             echo Validating application $app
-            
+
+            echo "******************** Validating Dev Manifests ************************"
             kustomize build ${app}/overlays/aws-us-west-2-cc-smarsh-dev -o dev_consolidated_manifest.yaml
             echo -e "--------- CONSOLIDATED MANIFEST ---------- \n$(cat dev_consolidated_manifest.yaml)"
             kustomize build ${app}/overlays/aws-us-west-2-cc-smarsh-dev
